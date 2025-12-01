@@ -1,4 +1,5 @@
-import { Service, ServiceType } from './types';
+
+import { Service, ServiceType, BlogPost } from './types';
 
 export const MOCK_SERVICES: Service[] = [
   {
@@ -8,12 +9,12 @@ export const MOCK_SERVICES: Service[] = [
     type: ServiceType.WEB,
     price_afn: 25000,
     price_usd: 350,
-    features: ["Responsive Design", "CMS Integration", "SEO Optimization", "1 Year Hosting"],
+    features: ["Responsive Design", "CMS Integration", "SEO Optimization", "1 Year Hosting", "Official Corporate Emails"],
     icon: "fas fa-laptop-code",
     specs: [
       { label: "Stack", value: "React / Laravel" },
       { label: "Delivery", value: "2 Weeks" },
-      { label: "Support", value: "3 Months Free" },
+      { label: "Emails", value: "Unlimited Accounts" },
       { label: "Storage", value: "10 GB SSD" }
     ]
   },
@@ -103,5 +104,88 @@ export const MOCK_ORDERS = [
     payment_method: 'stripe',
     amount_paid: "$200.00",
     date: "2023-10-28"
+  }
+];
+
+export const MOCK_POSTS: BlogPost[] = [
+  {
+    id: "1",
+    slug: "fintech-afghanistan-hessabpay",
+    title: "The Rise of Fintech in Afghanistan: How Digital Payments are Changing Business",
+    excerpt: "Exploring the integration of HessabPay and Stripe in local commerce, and how ZabahSoft bridges the gap for international trade.",
+    content: `
+      <p class="mb-4">Afghanistan's financial landscape is undergoing a rapid transformation. With the adoption of mobile money solutions like <strong>HessabPay</strong>, small businesses are moving away from cash-only operations to digital record-keeping.</p>
+      <h2 class="text-2xl font-bold mb-4 mt-8 text-gray-900 dark:text-white">Why Digital?</h2>
+      <p class="mb-4">Digital transactions offer security, traceability, and ease of access. For a long time, the lack of banking infrastructure hindered growth. Now, APIs allow developers to integrate payment gateways directly into websites.</p>
+      <p class="mb-4">At ZabahSoft, we have integrated HessabPay into our <em>E-Commerce Package</em>, allowing vendors to accept AFN payments instantly.</p>
+      <h2 class="text-2xl font-bold mb-4 mt-8 text-gray-900 dark:text-white">The Technical Challenge</h2>
+      <p class="mb-4">Integrating these systems requires secure handling of webhooks and tokens. Our team uses Laravel to ensure that every transaction is verified before a product is released.</p>
+    `,
+    coverImage: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&q=80&w=1200",
+    author: {
+      name: "Ahmad Fawad",
+      avatar: "https://ui-avatars.com/api/?name=Ahmad+Fawad&background=0D8ABC&color=fff",
+      role: "Lead Engineer"
+    },
+    category: "Tech",
+    tags: ["Fintech", "HessabPay", "E-Commerce"],
+    publishedAt: "Oct 24, 2023",
+    readTime: "5 min read",
+    featured: true
+  },
+  {
+    id: "2",
+    slug: "react-vs-laravel-stack",
+    title: "React vs Laravel: Choosing the Right Stack for Your Enterprise",
+    excerpt: "A deep dive into monolithic vs headless architectures. When should you decouple your frontend?",
+    content: `
+      <p class="mb-4">The debate between traditional server-side rendering and modern SPAs (Single Page Applications) is common. For many Afghan enterprises, SEO is key, which historically favored server-side rendering.</p>
+      <h2 class="text-2xl font-bold mb-4 mt-8 text-gray-900 dark:text-white">The Headless Approach</h2>
+      <p class="mb-4">By using Laravel as an API provider and React for the interface, we get the best of both worlds. Fast, interactive user experiences with a robust, secure backend.</p>
+    `,
+    coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1200",
+    author: {
+      name: "Sarah Karimi",
+      avatar: "https://ui-avatars.com/api/?name=Sarah+Karimi&background=e91e63&color=fff",
+      role: "Frontend Architect"
+    },
+    category: "Tutorial",
+    tags: ["React", "Laravel", "Architecture"],
+    publishedAt: "Nov 02, 2023",
+    readTime: "8 min read"
+  },
+  {
+    id: "3",
+    slug: "ai-support-bots",
+    title: "Automating Customer Support with Gemini & WhatsApp",
+    excerpt: "How we reduced support ticket resolution time by 60% using AI-powered chatbots integrated with standard messaging apps.",
+    content: "<p>Chatbots are no longer just simple decision trees...</p>",
+    coverImage: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&q=80&w=1200",
+    author: {
+      name: "ZabahSoft Team",
+      avatar: "https://ui-avatars.com/api/?name=Zabah+Soft&background=10b981&color=fff",
+      role: "Product"
+    },
+    category: "Business",
+    tags: ["AI", "Gemini", "Automation"],
+    publishedAt: "Nov 15, 2023",
+    readTime: "4 min read"
+  },
+  {
+    id: "4",
+    slug: "database-security-practices",
+    title: "Essential Database Security Practices for 2024",
+    excerpt: "Protecting sensitive client data is non-negotiable. Learn about encryption, replication, and backup strategies.",
+    content: "<p>Data breaches are costly. Here is how we secure our PostgreSQL clusters...</p>",
+    coverImage: "https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=1200",
+    author: {
+      name: "Ali Reza",
+      avatar: "https://ui-avatars.com/api/?name=Ali+Reza&background=6366f1&color=fff",
+      role: "DevOps Engineer"
+    },
+    category: "Tech",
+    tags: ["Security", "Database", "DevOps"],
+    publishedAt: "Nov 20, 2023",
+    readTime: "6 min read"
   }
 ];

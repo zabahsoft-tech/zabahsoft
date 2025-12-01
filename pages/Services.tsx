@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { MOCK_SERVICES } from '../constants';
+
+import React, { useState, useEffect } from 'react';
 import { User, Service } from '../types';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { api } from '../services/api';
 
 interface ServicesPageProps {
   user: User | null;
@@ -13,10 +14,42 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
   const [currency, setCurrency] = useState<'USD' | 'AFN'>('USD');
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Dynamic Data State
+  const [services, setServices] = useState<Service[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch Services from API on mount
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const data = await api.getServices();
+        setServices(data);
+      } catch (error) {
+        console.error("Failed to load services", error);
+        // Fallback to translation based mock if API totally fails and fallback logic in api.ts also fails (rare)
+        setServices(t.servicesList);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchServices();
+  }, [t.servicesList]);
 
   const openPaymentModal = (service: Service) => {
     setSelectedService(service);
     setIsModalOpen(true);
+  };
+
+  const handleCreateOrder = async (method: 'hessabpay' | 'stripe') => {
+      if (!selectedService) return;
+      try {
+          await api.createOrder(selectedService.id, method, {});
+          alert(`Order initiated via ${method}. Redirecting to payment...`);
+          setIsModalOpen(false);
+      } catch (e) {
+          alert("Failed to create order. Please try again.");
+      }
   };
 
   return (
@@ -45,86 +78,93 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
         </div>
       </div>
 
-      {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           {MOCK_SERVICES.map((service) => (
-             <div key={service.id} className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group relative">
-                {/* Badge if exists */}
-                {service.badge && (
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-400 to-pink-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg z-10 shadow-sm uppercase tracking-wide">
-                        {service.badge}
+      {/* Loading State */}
+      {isLoading ? (
+          <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+      ) : (
+        /* Services Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service) => (
+                <div key={service.id} className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group relative">
+                    {/* Badge if exists */}
+                    {service.badge && (
+                        <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-400 to-pink-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg z-10 shadow-sm uppercase tracking-wide">
+                            {service.badge}
+                        </div>
+                    )}
+
+                    <div className="p-6 flex-grow">
+                    {/* Icon & Title */}
+                    <div className="flex items-start gap-4 mb-4">
+                        <div className="w-12 h-12 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center border border-gray-100 dark:border-gray-700 group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors">
+                            <i className={`${service.icon || 'fas fa-box'} text-xl text-gray-400 dark:text-gray-500 group-hover:text-white transition-colors`}></i>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer">{service.name}</h3>
+                            <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold border border-blue-100 dark:border-blue-900/50 uppercase tracking-wide">
+                                {service.type}
+                            </span>
+                        </div>
                     </div>
-                )}
 
-                <div className="p-6 flex-grow">
-                   {/* Icon & Title */}
-                   <div className="flex items-start gap-4 mb-4">
-                       <div className="w-12 h-12 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center border border-gray-100 dark:border-gray-700 group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors">
-                           <i className={`${service.icon || 'fas fa-box'} text-xl text-gray-400 dark:text-gray-500 group-hover:text-white transition-colors`}></i>
-                       </div>
-                       <div>
-                           <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer">{service.name}</h3>
-                           <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold border border-blue-100 dark:border-blue-900/50 uppercase tracking-wide">
-                               {service.type}
-                           </span>
-                       </div>
-                   </div>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+                        {service.description}
+                    </p>
 
-                   <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
-                       {service.description}
-                   </p>
+                    {/* Specs Grid */}
+                    <div className="bg-gray-50 dark:bg-[#0d1117] rounded-lg p-3 border border-gray-100 dark:border-gray-800 mb-6">
+                        <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+                            {service.specs && service.specs.slice(0, 4).map((spec, idx) => (
+                                <div key={idx}>
+                                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold tracking-wider">{spec.label}</p>
+                                    <p className="text-xs font-semibold text-gray-900 dark:text-white truncate" title={spec.value}>{spec.value}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                   {/* Specs Grid */}
-                   <div className="bg-gray-50 dark:bg-[#0d1117] rounded-lg p-3 border border-gray-100 dark:border-gray-800 mb-6">
-                       <div className="grid grid-cols-2 gap-y-3 gap-x-2">
-                           {service.specs && service.specs.slice(0, 4).map((spec, idx) => (
-                               <div key={idx}>
-                                   <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold tracking-wider">{spec.label}</p>
-                                   <p className="text-xs font-semibold text-gray-900 dark:text-white truncate" title={spec.value}>{spec.value}</p>
-                               </div>
-                           ))}
-                       </div>
-                   </div>
+                    {/* Features List */}
+                    <ul className="space-y-2 mb-6">
+                        {service.features.slice(0, 3).map((feature, i) => (
+                            <li key={i} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                                <i className="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                {feature}
+                            </li>
+                        ))}
+                        {service.features.length > 3 && (
+                            <li className="text-xs text-blue-600 dark:text-blue-400 font-medium pl-6">+ {service.features.length - 3} more features</li>
+                        )}
+                    </ul>
+                    </div>
 
-                   {/* Features List */}
-                   <ul className="space-y-2 mb-6">
-                       {service.features.slice(0, 3).map((feature, i) => (
-                           <li key={i} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-                               <i className="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
-                               {feature}
-                           </li>
-                       ))}
-                       {service.features.length > 3 && (
-                           <li className="text-xs text-blue-600 dark:text-blue-400 font-medium pl-6">+ {service.features.length - 3} more features</li>
-                       )}
-                   </ul>
+                    {/* Footer / Price */}
+                    <div className="p-6 bg-gray-50 dark:bg-[#0d1117]/50 border-t border-gray-200 dark:border-gray-700 mt-auto">
+                    <div className="flex justify-between items-center mb-4">
+                        <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t.startingAt}</p>
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                {currency === 'USD' ? `$${service.price_usd}` : `؋${service.price_afn.toLocaleString()}`}
+                            </p>
+                        </div>
+                    </div>
+                    <button 
+                        onClick={() => openPaymentModal(service)}
+                        className="w-full bg-gray-900 dark:bg-white hover:bg-black dark:hover:bg-gray-200 text-white dark:text-gray-900 py-3 rounded-lg font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                    >
+                        {t.purchaseNow} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i>
+                    </button>
+                    </div>
                 </div>
-
-                {/* Footer / Price */}
-                <div className="p-6 bg-gray-50 dark:bg-[#0d1117]/50 border-t border-gray-200 dark:border-gray-700 mt-auto">
-                   <div className="flex justify-between items-center mb-4">
-                      <div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{t.startingAt}</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                            {currency === 'USD' ? `$${service.price_usd}` : `؋${service.price_afn.toLocaleString()}`}
-                          </p>
-                      </div>
-                   </div>
-                   <button 
-                      onClick={() => openPaymentModal(service)}
-                      className="w-full bg-gray-900 dark:bg-white hover:bg-black dark:hover:bg-gray-200 text-white dark:text-gray-900 py-3 rounded-lg font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
-                   >
-                      {t.purchaseNow} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i>
-                   </button>
-                </div>
-             </div>
-           ))}
-      </div>
+            ))}
+        </div>
+      )}
 
       {/* Modern Payment Modal */}
       {isModalOpen && selectedService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#161b22] rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-gray-200 dark:border-gray-700 animate-fade-in-up flex flex-col md:flex-row">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-[#161b22] rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-gray-200 dark:border-gray-700 animate-scale-in flex flex-col md:flex-row">
              
              {/* Left Side: Summary */}
              <div className="w-full md:w-2/5 bg-gray-50 dark:bg-[#0d1117] p-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 flex flex-col">
@@ -185,7 +225,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                     
                     <div className="space-y-3 flex-grow">
                       <button 
-                        onClick={() => alert("Redirecting to HessabPay...")}
+                        onClick={() => handleCreateOrder('hessabpay')}
                         className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all text-left group"
                       >
                          <div className="flex items-center gap-4">
@@ -202,7 +242,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                       </button>
 
                       <button 
-                        onClick={() => alert("Initializing Stripe...")}
+                        onClick={() => handleCreateOrder('stripe')}
                         className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all text-left group"
                       >
                          <div className="flex items-center gap-4">

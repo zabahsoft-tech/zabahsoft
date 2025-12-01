@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
@@ -50,6 +51,17 @@ const ChatWidget: React.FC = () => {
     }
   };
 
+  const handleFeedback = (index: number, type: 'up' | 'down') => {
+    setMessages(prev => prev.map((msg, i) => {
+      if (i === index) {
+        // In a real app, this would send data to an analytics endpoint
+        console.log(`[Feedback] Message ${index} rated ${type}:`, msg.text);
+        return { ...msg, feedback: type };
+      }
+      return msg;
+    }));
+  };
+
   return (
     <div className={`fixed bottom-6 ${dir === 'rtl' ? 'left-6' : 'right-6'} z-50`} dir="ltr">
       {!isOpen && (
@@ -91,14 +103,38 @@ const ChatWidget: React.FC = () => {
                         <i className="fas fa-robot"></i>
                     </div>
                 )}
-                <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
-                    msg.role === 'user'
-                      ? 'bg-gh-blue text-white rounded-br-none'
-                      : 'bg-white text-gh-text border border-gh-border-light rounded-bl-none'
-                  }`}
-                >
-                  {msg.text}
+                <div className="max-w-[80%]">
+                    <div
+                      className={`rounded-2xl px-4 py-3 text-sm shadow-sm ${
+                        msg.role === 'user'
+                          ? 'bg-gh-blue text-white rounded-br-none'
+                          : 'bg-white text-gh-text border border-gh-border-light rounded-bl-none'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    
+                    {/* Feedback Buttons for Bot Messages */}
+                    {msg.role === 'model' && (
+                        <div className="flex gap-3 mt-1 ml-2">
+                            <button 
+                                onClick={() => handleFeedback(index, 'up')}
+                                className={`text-xs transition-colors ${msg.feedback === 'up' ? 'text-green-600' : 'text-gray-400 hover:text-green-500'}`}
+                                aria-label="Helpful"
+                                disabled={!!msg.feedback}
+                            >
+                                <i className={`${msg.feedback === 'up' ? 'fas' : 'far'} fa-thumbs-up`}></i>
+                            </button>
+                            <button 
+                                onClick={() => handleFeedback(index, 'down')}
+                                className={`text-xs transition-colors ${msg.feedback === 'down' ? 'text-red-600' : 'text-gray-400 hover:text-red-500'}`}
+                                aria-label="Not helpful"
+                                disabled={!!msg.feedback}
+                            >
+                                <i className={`${msg.feedback === 'down' ? 'fas' : 'far'} fa-thumbs-down`}></i>
+                            </button>
+                        </div>
+                    )}
                 </div>
               </div>
             ))}

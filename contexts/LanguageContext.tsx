@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language } from '../types';
 import { translations, getTranslation } from '../translations';
@@ -12,7 +13,8 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  // CHANGED: Default language set to 'fa' (Persian)
+  const [language, setLanguage] = useState<Language>('fa');
 
   const dir: 'ltr' | 'rtl' = language === 'en' ? 'ltr' : 'rtl';
 

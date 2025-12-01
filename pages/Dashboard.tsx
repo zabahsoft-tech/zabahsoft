@@ -1,8 +1,9 @@
-import React from 'react';
-import { User } from '../types';
-import { MOCK_ORDERS } from '../constants';
+
+import React, { useEffect, useState } from 'react';
+import { User, Order } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLanguage } from '../contexts/LanguageContext';
+import { api } from '../services/api';
 
 interface DashboardProps {
   user: User;
@@ -25,6 +26,22 @@ const data = [
 
 const Dashboard: React.FC<DashboardProps> = ({ user }) => {
   const { t, dir } = useLanguage();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const result = await api.getOrders();
+        setOrders(result);
+      } catch (err) {
+        console.error("Failed to fetch orders", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto py-6 flex flex-col md:flex-row gap-8">
@@ -62,7 +79,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
               <i className="fas fa-book-open"></i> {t.activeServices} <span className="bg-gh-gray text-gh-text rounded-full px-2 py-0.5 text-xs border border-gh-border">2</span>
            </button>
            <button className="flex items-center gap-2 py-3 border-b-2 border-transparent hover:border-gh-border text-gh-text text-sm">
-              <i className="fas fa-box"></i> {t.recentOrders} <span className="bg-gh-gray text-gh-text rounded-full px-2 py-0.5 text-xs border border-gh-border">4</span>
+              <i className="fas fa-box"></i> {t.recentOrders} <span className="bg-gh-gray text-gh-text rounded-full px-2 py-0.5 text-xs border border-gh-border">{orders.length}</span>
            </button>
            <button className="flex items-center gap-2 py-3 border-b-2 border-transparent hover:border-gh-border text-gh-text text-sm">
               <i className="fas fa-chart-bar"></i> {t.spendingOverview}
@@ -71,18 +88,18 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-           <div className="border border-gh-border rounded-md p-4 bg-white">
+           <div className="border border-gh-border rounded-md p-4 bg-white animate-fade-in-up" style={{animationDelay: '0.1s'}}>
               <h4 className="text-xs text-gh-muted font-medium mb-1">{t.totalSpent} (YTD)</h4>
               <p className="text-2xl font-bold text-gh-text">$550.00</p>
            </div>
-           <div className="border border-gh-border rounded-md p-4 bg-white">
+           <div className="border border-gh-border rounded-md p-4 bg-white animate-fade-in-up" style={{animationDelay: '0.2s'}}>
               <h4 className="text-xs text-gh-muted font-medium mb-1">{t.openTickets}</h4>
               <p className="text-2xl font-bold text-gh-text">0</p>
            </div>
         </div>
 
         {/* Orders Table */}
-        <div className="border border-gh-border rounded-md bg-white overflow-hidden mb-8">
+        <div className="border border-gh-border rounded-md bg-white overflow-hidden mb-8 animate-fade-in-up" style={{animationDelay: '0.3s'}}>
           <div className="bg-gh-gray px-4 py-3 border-b border-gh-border flex justify-between items-center">
              <h3 className="font-semibold text-sm text-gh-text">{t.recentOrders}</h3>
              <button className="text-xs text-gh-blue hover:underline">View all</button>
@@ -100,39 +117,45 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gh-border">
-                {MOCK_ORDERS.map((order) => (
-                  <tr key={order.id} className="hover:bg-gh-gray transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs">{order.id}</td>
-                    <td className="px-4 py-3 font-medium text-gh-text">{order.service_name}</td>
-                    <td className="px-4 py-3 text-gh-muted">{order.date}</td>
-                    <td className="px-4 py-3 text-gh-text">{order.amount_paid}</td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                        order.status === 'completed' 
-                        ? 'bg-green-50 text-green-700 border-green-200' 
-                        : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                       {order.license_key ? (
-                         <button onClick={() => alert(`License Key: ${order.license_key}`)} className="text-gh-blue hover:underline text-xs font-medium">
-                           {t.viewKey}
-                         </button>
-                       ) : (
-                         <span className="text-gh-muted">-</span>
-                       )}
-                    </td>
-                  </tr>
-                ))}
+                {loading ? (
+                    <tr>
+                        <td colSpan={6} className="px-4 py-8 text-center text-gh-muted">Loading orders...</td>
+                    </tr>
+                ) : (
+                    orders.map((order) => (
+                    <tr key={order.id} className="hover:bg-gh-gray transition-colors">
+                        <td className="px-4 py-3 font-mono text-xs">{order.id}</td>
+                        <td className="px-4 py-3 font-medium text-gh-text">{order.service_name}</td>
+                        <td className="px-4 py-3 text-gh-muted">{order.date}</td>
+                        <td className="px-4 py-3 text-gh-text">{order.amount_paid}</td>
+                        <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                            order.status === 'completed' 
+                            ? 'bg-green-50 text-green-700 border-green-200' 
+                            : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                        }`}>
+                            {order.status}
+                        </span>
+                        </td>
+                        <td className="px-4 py-3">
+                        {order.license_key ? (
+                            <button onClick={() => alert(`License Key: ${order.license_key}`)} className="text-gh-blue hover:underline text-xs font-medium">
+                            {t.viewKey}
+                            </button>
+                        ) : (
+                            <span className="text-gh-muted">-</span>
+                        )}
+                        </td>
+                    </tr>
+                    ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Contribution Chart */}
-        <div className="border border-gh-border rounded-md bg-white p-4">
+        <div className="border border-gh-border rounded-md bg-white p-4 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
            <h3 className="font-semibold text-sm text-gh-text mb-4">{t.spendingOverview}</h3>
            <div className="h-64 w-full">
              <ResponsiveContainer width="100%" height="100%">

@@ -1,9 +1,108 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ZabahSoft</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>ZabahSoft | Web Design, Hosting & Official Emails in Kabul, Afghanistan</title>
+    <meta name="title" content="ZabahSoft | Web Design, Hosting & Official Emails in Kabul, Afghanistan">
+    <meta name="description" content="ZabahSoft is Afghanistan's leading tech company providing secure website hosting, official corporate emails, database solutions, and software development in Kabul.">
+    <meta name="keywords" content="ZabahSoft, Web Design Kabul, Web Hosting Afghanistan, Official Email Services Afghanistan, Database Solutions Kabul, Software Company Afghanistan, IT Services Kabul, HessabPay Integration">
+    <meta name="author" content="ZabahSoft Engineering Team">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="geo.region" content="AF-KAB">
+    <meta name="geo.placename" content="Kabul">
+    <meta name="geo.position" content="34.5553;69.2075">
+    <meta name="ICBM" content="34.5553, 69.2075">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zabahsoft.com/">
+    <meta property="og:title" content="ZabahSoft | Enterprise Tech Solutions in Afghanistan">
+    <meta property="og:description" content="Secure hosting, professional emails, and custom software solutions for Afghan businesses. Trusted by government and private sectors in Kabul.">
+    <meta property="og:image" content="https://zabahsoft.com/assets/og-preview.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://zabahsoft.com/">
+    <meta property="twitter:title" content="ZabahSoft | Web & Hosting Services Kabul">
+    <meta property="twitter:description" content="Elevate your business with ZabahSoft's secure hosting, official emails, and software development services in Afghanistan.">
+    <meta property="twitter:image" content="https://zabahsoft.com/assets/og-preview.jpg">
+
+    <!-- Structured Data (JSON-LD) for Local Business -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "ZabahSoft",
+      "image": "https://zabahsoft.com/logo.png",
+      "@id": "https://zabahsoft.com",
+      "url": "https://zabahsoft.com",
+      "telephone": "+93799000000",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Shahr-e-Naw, Ansari Square, Business Tower",
+        "addressLocality": "Kabul",
+        "postalCode": "1001",
+        "addressCountry": "AF"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 34.5553,
+        "longitude": 69.2075
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Saturday",
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday"
+        ],
+        "opens": "08:00",
+        "closes": "17:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/zabahsoft",
+        "https://twitter.com/zabahsoft",
+        "https://www.linkedin.com/company/zabahsoft"
+      ],
+      "serviceArea": {
+        "@type": "Country",
+        "name": "Afghanistan"
+      },
+      "makesOffer": [
+        {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Web Hosting & Domain Registration"
+            }
+        },
+        {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Official Corporate Email Services"
+            }
+        },
+        {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Database Management"
+            }
+        }
+      ]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
@@ -35,8 +134,16 @@
               'gh-purple': '#a371f7',
             },
             animation: {
-              'blob': 'blob 7s infinite',
-              'fade-in-up': 'fadeInUp 0.5s ease-out',
+              'blob': 'blob 10s infinite',
+              'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in-down': 'fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in': 'fadeIn 1s ease-out forwards',
+              'slide-in-right': 'slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'slide-in-left': 'slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'float': 'float 6s ease-in-out infinite',
+              'float-fast': 'float 4s ease-in-out infinite',
+              'pulse-slow': 'pulseSlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'scale-in': 'scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             },
             keyframes: {
               blob: {
@@ -46,8 +153,36 @@
                 '100%': { transform: 'translate(0px, 0px) scale(1)' },
               },
               fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              fadeInDown: {
+                '0%': { opacity: '0', transform: 'translateY(-30px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideInRight: {
+                '0%': { opacity: '0', transform: 'translateX(30px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              slideInLeft: {
+                '0%': { opacity: '0', transform: 'translateX(-30px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              pulseSlow: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.6' },
+              },
+              scaleIn: {
+                '0%': { transform: 'scale(0.95)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
               }
             }
           }
@@ -68,6 +203,20 @@
         height: 1px;
         width: 100%;
         opacity: 0.5;
+      }
+      
+      /* Glassmorphism utilities */
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .glass-light {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.05);
       }
     </style>
   <script type="importmap">
