@@ -35,6 +35,28 @@ const WebSolutions: React.FC = () => {
     });
   };
 
+  const packages = [
+    {
+      name: t.pkgStarter,
+      price: "$99",
+      features: [t.featDomain, t.featDesign, t.featSEO, `1 ${t.featEmails}`, `500MB ${t.featStorage}`],
+      color: "blue"
+    },
+    {
+      name: t.pkgBusiness,
+      price: "$499",
+      features: [t.featDomain, t.featDesign, `5 ${t.featEmails}`, `5GB ${t.featStorage}`, t.featSupport, t.featSSL],
+      color: "purple",
+      popular: true
+    },
+    {
+      name: t.pkgEnterprise,
+      price: "Custom",
+      features: ["Custom Web App", "Unlimited Emails", "Cloud Hosting", "Dedicated Support", "SLA"],
+      color: "gray"
+    }
+  ];
+
   return (
     <div className="bg-white dark:bg-[#0d1117] text-gray-900 dark:text-white min-h-screen font-sans transition-colors duration-300">
       
@@ -54,8 +76,7 @@ const WebSolutions: React.FC = () => {
           </div>
           
           <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-8 text-gray-900 dark:text-white drop-shadow-sm leading-tight animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
-            Crafting Digital <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-white">Experiences</span>
+            {t.webHeroTitle}
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed font-light animate-fade-in-up opacity-0" style={{animationDelay: '0.5s'}}>
@@ -84,22 +105,62 @@ const WebSolutions: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
           <div className="animate-fade-in opacity-0" style={{animationDelay: '0.8s'}}>
             <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">50+</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">Enterprise Clients</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statClients}</div>
           </div>
           <div className="animate-fade-in opacity-0" style={{animationDelay: '0.9s'}}>
             <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">99.9%</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">Uptime Guarantee</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statUptime}</div>
           </div>
           <div className="animate-fade-in opacity-0" style={{animationDelay: '1.0s'}}>
             <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">2 Wks</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">Avg. Delivery</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statDelivery}</div>
           </div>
           <div className="animate-fade-in opacity-0" style={{animationDelay: '1.1s'}}>
             <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">24/7</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">Support</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statSupport}</div>
           </div>
         </div>
       </div>
+
+      {/* Web Packages Section (New) */}
+      <section className="py-24 px-4 bg-gray-50 dark:bg-[#161b22] border-b border-gray-200 dark:border-gray-800">
+         <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+               <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.webPackagesTitle}</h2>
+               <p className="text-lg text-gray-600 dark:text-gray-400">{t.webPackagesDesc}</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {packages.map((pkg, i) => (
+                  <div key={i} className={`relative bg-white dark:bg-[#0d1117] rounded-3xl p-8 border hover:-translate-y-2 transition-all duration-300 shadow-xl flex flex-col ${pkg.popular ? 'border-blue-500 ring-4 ring-blue-500/10 scale-105 z-10' : 'border-gray-200 dark:border-gray-800'}`}>
+                     {pkg.popular && (
+                        <div className="absolute top-0 inset-x-0 bg-blue-600 text-white text-xs font-bold py-1.5 text-center uppercase tracking-widest rounded-t-[22px]">
+                           {t.mostPopular}
+                        </div>
+                     )}
+                     <div className={pkg.popular ? 'mt-4' : ''}>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{pkg.name}</h3>
+                        <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-8">{pkg.price}</p>
+                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-4 tracking-wider">{t.pkgIncluded}</p>
+                        <ul className="space-y-4 mb-8 flex-grow">
+                           {pkg.features.map((f, idx) => (
+                              <li key={idx} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                                 <i className="fas fa-check-circle text-green-500"></i> {f}
+                              </li>
+                           ))}
+                        </ul>
+                        <button 
+                           onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                           className={`w-full py-3 rounded-xl font-bold transition-colors ${pkg.popular ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20'}`}
+                        >
+                           {t.planBtn}
+                        </button>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
 
       {/* Demos Section */}
       <section id="demos" className="py-32 px-4 w-full bg-white dark:bg-[#0d1117] relative">
@@ -142,10 +203,11 @@ const WebSolutions: React.FC = () => {
         </div>
       </section>
 
-      {/* Single Demo Viewer Modal */}
+      {/* Single Demo Viewer Modal (Iframe + Details) */}
       {activeDemo && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-6 bg-black/80 backdrop-blur-md animate-scale-in">
-           <div className="bg-white dark:bg-[#0d1117] w-full max-w-7xl h-full md:h-[90vh] md:rounded-2xl overflow-hidden shadow-2xl flex flex-col border border-gray-200 dark:border-gray-800 relative">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 bg-black/90 backdrop-blur-sm animate-scale-in">
+           <div className="bg-white dark:bg-[#0d1117] w-full max-w-[1400px] h-full md:h-[95vh] md:rounded-2xl overflow-hidden shadow-2xl flex flex-col border border-gray-200 dark:border-gray-800 relative">
+              
               {/* Fake Browser Toolbar */}
               <div className="bg-gray-100 dark:bg-[#161b22] px-4 py-3 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between shrink-0">
                  <div className="flex items-center gap-4 flex-1">
@@ -155,9 +217,9 @@ const WebSolutions: React.FC = () => {
                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     </div>
                     {/* Address Bar */}
-                    <div className="hidden md:flex flex-1 max-w-xl mx-auto bg-white dark:bg-[#0d1117] rounded-md px-4 py-1.5 text-xs text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-800 items-center gap-2">
+                    <div className="hidden md:flex flex-1 max-w-2xl mx-auto bg-white dark:bg-[#0d1117] rounded-md px-4 py-1.5 text-xs text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-800 items-center gap-2">
                        <i className="fas fa-lock text-green-500"></i>
-                       <span className="truncate">https://zabahsoft.com/demos/{activeDemo.category.toLowerCase()}/{activeDemo.id}</span>
+                       <span className="truncate">{activeDemo.previewUrl}</span>
                     </div>
                  </div>
                  <button onClick={() => setActiveDemo(null)} className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2">
@@ -165,51 +227,54 @@ const WebSolutions: React.FC = () => {
                  </button>
               </div>
 
-              {/* Viewer Content */}
-              <div className="flex-1 overflow-y-auto relative bg-white dark:bg-black">
-                 <div className="relative">
-                    {/* Demo Hero */}
-                    <div className="h-[500px] relative overflow-hidden group">
-                       <img src={activeDemo.image} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-700" alt="Hero" />
-                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
-                       <div className="absolute bottom-0 left-0 right-0 p-12">
-                          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-white animate-slide-in-right">{activeDemo.title}</h1>
-                          <p className="text-xl text-gray-200 max-w-2xl animate-fade-in-up" style={{animationDelay: '0.2s'}}>{activeDemo.description}</p>
-                       </div>
+              {/* Live Preview Iframe */}
+              <div className="flex-1 bg-gray-200 dark:bg-black relative">
+                 <iframe 
+                    src={activeDemo.previewUrl} 
+                    className="w-full h-full border-none"
+                    title="Live Preview"
+                    sandbox="allow-scripts allow-same-origin"
+                 ></iframe>
+                 <div className="absolute inset-0 pointer-events-none bg-black/5 dark:bg-white/5 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <p className="bg-black/70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">Live Interaction Mode</p>
+                 </div>
+              </div>
+
+              {/* Bottom Details Panel */}
+              <div className="bg-white dark:bg-[#161b22] border-t border-gray-200 dark:border-gray-800 p-6 md:p-8 shrink-0 overflow-y-auto max-h-[40vh]">
+                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
+                    <div className="md:w-2/3">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{activeDemo.title}</h2>
+                        <p className="text-gray-600 dark:text-gray-400 mb-6">{activeDemo.description}</p>
+                        
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                           <div>
+                              <p className="text-xs text-gray-500 uppercase font-bold mb-1">Client</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">{activeDemo.client || 'Private'}</p>
+                           </div>
+                           <div>
+                              <p className="text-xs text-gray-500 uppercase font-bold mb-1">Year</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">{activeDemo.year || '2023'}</p>
+                           </div>
+                           <div>
+                              <p className="text-xs text-gray-500 uppercase font-bold mb-1">Category</p>
+                              <p className="text-sm font-medium text-blue-600 dark:text-blue-400">{activeDemo.category}</p>
+                           </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                           {activeDemo.tags.map(tag => (
+                              <span key={tag} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-md text-xs font-mono border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">{tag}</span>
+                           ))}
+                        </div>
                     </div>
-                    
-                    {/* Demo Content Simulation */}
-                    <div className="max-w-5xl mx-auto py-16 px-6">
-                       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                          {[1,2,3].map(i => (
-                             <div key={i} className="bg-gray-50 dark:bg-[#161b22] p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 animate-fade-in-up" style={{animationDelay: `${0.1 * i}s`}}>
-                                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 border border-blue-200 dark:border-blue-500/20">
-                                   <i className="fas fa-layer-group text-xl"></i>
-                                </div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Feature {i}</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">High-performance architecture with scalable components designed for Afghan enterprise needs.</p>
-                             </div>
-                          ))}
-                       </div>
-                       
-                       <div className="bg-gray-100 dark:bg-[#161b22] rounded-3xl p-10 flex flex-col md:flex-row items-center gap-10 border border-gray-200 dark:border-gray-800 animate-fade-in-up">
-                          <div className="flex-1">
-                             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Start your project</h2>
-                             <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-lg">
-                                Like what you see? This template can be customized for your brand identity within 2 weeks.
-                             </p>
-                             <div className="flex gap-2 flex-wrap">
-                                {activeDemo.tags.map(tag => (
-                                   <span key={tag} className="px-3 py-1 bg-white dark:bg-black rounded-md text-xs font-mono border border-gray-300 dark:border-gray-800 text-gray-600 dark:text-gray-400">{tag}</span>
-                                ))}
-                             </div>
-                          </div>
-                          <div className="w-full md:w-auto">
-                              <button onClick={() => { document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); setActiveDemo(null); }} className="w-full md:w-auto px-10 py-4 bg-green-600 hover:bg-green-500 text-white rounded-full font-bold shadow-lg transition-all hover:scale-105">
-                                 Get a Quote
-                              </button>
-                          </div>
-                       </div>
+
+                    <div className="md:w-1/3 flex flex-col justify-center items-start border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 pt-6 md:pt-0 md:pl-8">
+                       <h3 className="font-bold text-gray-900 dark:text-white mb-4">{t.webFormTitle}</h3>
+                       <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Need something similar? Let's build your custom solution.</p>
+                       <button onClick={() => { document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); setActiveDemo(null); }} className="w-full px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg font-bold shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2">
+                          {t.btnSubmit} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i>
+                       </button>
                     </div>
                  </div>
               </div>
@@ -350,10 +415,10 @@ const WebSolutions: React.FC = () => {
                             onChange={handleChange}
                             className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-xl px-5 py-4 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all appearance-none cursor-pointer"
                         >
-                            <option value="<1000">Less than $1,000</option>
-                            <option value="1000-5000">$1,000 - $5,000</option>
-                            <option value="5000-10000">$5,000 - $10,000</option>
-                            <option value="10000+">$10,000+</option>
+                            <option value="<1000">{t.budgetLow}</option>
+                            <option value="1000-5000">{t.budgetMedium}</option>
+                            <option value="5000-10000">{t.budgetHigh}</option>
+                            <option value="10000+">{t.budgetEnterprise}</option>
                         </select>
                         <i className="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                       </div>

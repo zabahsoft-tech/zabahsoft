@@ -210,8 +210,8 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                       <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl mb-2">
                           <i className="fas fa-user-lock"></i>
                       </div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">Account Required</h4>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">To manage licenses and track this order, please sign in or create an account.</p>
+                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">{t.accountRequired}</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">{t.loginToOrder}</p>
                       <Link 
                         to="/login"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-lg shadow-md transition-colors"
@@ -235,7 +235,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                             </div>
                             <div>
                                <p className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400">HessabPay</p>
-                               <p className="text-xs text-gray-500 dark:text-gray-400">Instant AFN Payment</p>
+                               <p className="text-xs text-gray-500 dark:text-gray-400">{t.hessabPayDesc}</p>
                             </div>
                          </div>
                          <i className="fas fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:text-blue-500"></i>
@@ -251,7 +251,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                             </div>
                             <div>
                                <p className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400">Credit Card</p>
-                               <p className="text-xs text-gray-500 dark:text-gray-400">Secure Global Payment</p>
+                               <p className="text-xs text-gray-500 dark:text-gray-400">{t.stripeDesc}</p>
                             </div>
                          </div>
                          <i className="fas fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:text-blue-500"></i>
@@ -260,7 +260,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ user }) => {
                     
                     <div className="mt-6 text-center">
                         <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-2">
-                            <i className="fas fa-shield-alt mr-1"></i> SSL Encrypted & Secure
+                            <i className="fas fa-shield-alt mr-1"></i> {t.sslSecure}
                         </p>
                     </div>
                   </div>

@@ -86,8 +86,11 @@ export interface WebDemo {
   title: string;
   category: string;
   image: string;
+  previewUrl: string; // New field for iframe
   tags: string[];
   description: string;
+  client?: string;
+  year?: string;
 }
 
 export interface Testimonial {

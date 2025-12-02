@@ -62,6 +62,13 @@ const baseEn = {
   total: "Total Due",
   selectPayment: "Payment Method",
   
+  // Payment & Auth Modal (New)
+  accountRequired: "Account Required",
+  loginToOrder: "To manage licenses and track this order, please sign in or create an account.",
+  hessabPayDesc: "Instant AFN Payment",
+  stripeDesc: "Secure Global Payment",
+  sslSecure: "SSL Encrypted & Secure",
+
   // Dashboard
   welcomeBack: "Welcome back",
   activeServices: "Deployments",
@@ -90,15 +97,29 @@ const baseEn = {
   typeMessage: "Type a message...",
 
   // Web Solutions Page
-  webHeroTitle: "Crafting Digital Experiences",
-  webHeroSubtitle: "From high-performance corporate sites to complex web applications, we build solutions that drive growth.",
+  webHeroTitle: "Create Your Website Now",
+  webHeroSubtitle: "From high-performance corporate sites to complex web applications, we build solutions that drive growth. Get started today with our all-in-one packages.",
   webDemosTitle: "Featured Projects & Demos",
-  webDemosDesc: "Explore our recent work and available templates. Click to view live preview.",
+  webDemosDesc: "Explore our recent work. Click 'View Live Demo' to interact with the actual website inside the simulator.",
   webProcess: "Our Development Process",
   webFormTitle: "Start Your Project",
   webFormSubtitle: "Tell us about your goals. We'll get back to you with a proposal within 24 hours.",
   viewDemo: "View Live Demo",
   closeDemo: "Close Preview",
+  
+  // Web Stats
+  statClients: "Enterprise Clients",
+  statUptime: "Uptime Guarantee",
+  statDelivery: "Avg. Delivery",
+  statSupport: "Support",
+
+  // Web Packages
+  webPackagesTitle: "All-in-One Web Packages",
+  webPackagesDesc: "Everything you need to get online. Includes Hosting, Domain, and Official Emails.",
+  pkgStarter: "Starter Kit",
+  pkgBusiness: "Professional",
+  pkgEnterprise: "Enterprise",
+  pkgIncluded: "Everything Included:",
   
   // Official Emails Page
   officialHeroTitle: "Secure Your Digital Identity",
@@ -150,6 +171,9 @@ const baseEn = {
   featSecurity: "Advanced Security",
   featSpam: "Spam Protection",
   featWebmail: "Webmail Access",
+  featDomain: "Free Domain (.com)",
+  featDesign: "Responsive Design",
+  featSEO: "Basic SEO",
   
   bestValue: "Best Value",
   mostPopular: "Most Popular",
@@ -179,6 +203,12 @@ const baseEn = {
   optWebApp: "Web Application / SaaS",
   optLanding: "Landing Page",
   optOther: "Other / Custom",
+  
+  // Budgets
+  budgetLow: "Less than $1,000",
+  budgetMedium: "$1,000 - $5,000",
+  budgetHigh: "$5,000 - $10,000",
+  budgetEnterprise: "$10,000+",
 
   // Blog
   blogHeroTitle: "Insights & Updates",
@@ -386,21 +416,21 @@ const branchesEn: Branch[] = [
 ];
 
 const demosEn: WebDemo[] = [
-  { id: 1, title: "Afghan-Mart E-Commerce", category: "E-Commerce", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Laravel", "HessabPay"], description: "A complete multi-vendor marketplace tailored for the Afghan market. Features include SMS notifications, HessabPay integration, and a dedicated vendor dashboard." },
-  { id: 2, title: "Kabul Logistics Corp", category: "Corporate", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["Next.js", "Tailwind", "SEO"], description: "Modern corporate identity for a logistics giant. Optimized for high SEO ranking with a shipment tracking portal." },
-  { id: 3, title: "MedTech Hospital Portal", category: "Web App", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Node.js", "PostgreSQL"], description: "Secure patient management system with role-based access for doctors, nurses, and administrators." }
+  { id: 1, title: "Afghan-Mart E-Commerce", category: "E-Commerce", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.ecom.zabahsoft.com", tags: ["React", "Laravel", "HessabPay"], description: "A complete multi-vendor marketplace tailored for the Afghan market. Features include SMS notifications, HessabPay integration, and a dedicated vendor dashboard.", client: "Afghan-Mart Group", year: "2023" },
+  { id: 2, title: "Kabul Logistics Corp", category: "Corporate", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.logistics.zabahsoft.com", tags: ["Next.js", "Tailwind", "SEO"], description: "Modern corporate identity for a logistics giant. Optimized for high SEO ranking with a shipment tracking portal.", client: "Kabul Logistics", year: "2022" },
+  { id: 3, title: "MedTech Hospital Portal", category: "Web App", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.medtech.zabahsoft.com", tags: ["React", "Node.js", "PostgreSQL"], description: "Secure patient management system with role-based access for doctors, nurses, and administrators.", client: "City Hospital", year: "2023" }
 ];
 
 // Farsi Data (Sample Translations)
 const servicesFa: Service[] = [
   {
     id: 1,
-    name: "پکیج وب‌سایت شرکتی",
+    name: "بسته وب‌سایت شرکتی",
     description: "یک وب‌سایت حرفه‌ای و ریسپانسیو برای ایجاد حضور دیجیتال قوی برای کسب‌وکار شما.",
     type: ServiceType.WEB,
     price_afn: 25000,
     price_usd: 350,
-    features: ["طراحی ریسپانسیو", "اتصال به CMS", "بهینه‌سازی SEO", "هاستینگ ۱ ساله", "ایمیل‌های رسمی شرکتی"],
+    features: ["طراحی واکنش‌گرا", "اتصال به سیستم مدیریت محتوا", "بهینه‌سازی سئو", "میزبانی ۱ ساله", "ایمیل‌های رسمی شرکتی"],
     icon: "fas fa-laptop-code",
     specs: [
       { label: "تکنولوژی", value: "React / Laravel" },
@@ -412,7 +442,7 @@ const servicesFa: Service[] = [
   {
     id: 2,
     name: "پلتفرم فروشگاه آنلاین",
-    description: "فروشگاه آنلاین با امکانات کامل، درگاه‌های پرداخت، مدیریت موجودی و آنالیتیکس.",
+    description: "فروشگاه آنلاین با امکانات کامل، درگاه‌های پرداخت، مدیریت موجودی و تحلیل داده.",
     type: ServiceType.WEB,
     price_afn: 60000,
     price_usd: 850,
@@ -477,8 +507,8 @@ const servicesFa: Service[] = [
 ];
 
 const testimonialsFa: Testimonial[] = [
-  { id: 1, name: "جمشید الکوزی", role: "مدیر عامل", company: "گروه الکوزی", content: "ظبه سافت زیرساخت دیجیتال ما را متحول کرد. میزبانی آنها بسیار پایدار است و پشتیبانی در کابل بی‌نظیر است.", avatar: "https://ui-avatars.com/api/?name=Jamshid+Alokozay&background=0D8ABC&color=fff", rating: 5 },
-  { id: 2, name: "مریم وفا", role: "مدیر IT", company: "دانشگاه کابل", content: "راهکار ایمیل رسمی ارائه شده توسط ظبه سافت به اساتید ما هویت حرفه‌ای مورد نیاز برای همکاری‌های بین‌المللی را داد.", avatar: "https://ui-avatars.com/api/?name=Mariam+Wafa&background=e91e63&color=fff", rating: 5 },
+  { id: 1, name: "جمشید الکوزی", role: "مدیر عامل", company: "گروه الکوزی", content: "ظبه سافت زیرساخت دیجیتال ما را متحول کرد. میزبانی وب آنها بسیار پایدار است و پشتیبانی فنی در کابل بی‌نظیر است.", avatar: "https://ui-avatars.com/api/?name=Jamshid+Alokozay&background=0D8ABC&color=fff", rating: 5 },
+  { id: 2, name: "مریم وفا", role: "مدیر فناوری اطلاعات", company: "دانشگاه کابل", content: "راهکار ایمیل رسمی ارائه شده توسط ظبه سافت به اساتید ما هویت حرفه‌ای مورد نیاز برای همکاری‌های بین‌المللی را داد.", avatar: "https://ui-avatars.com/api/?name=Mariam+Wafa&background=e91e63&color=fff", rating: 5 },
   { id: 3, name: "فیصل نوری", role: "بنیانگذار", company: "سوپرمارکت‌های نوری", content: "سیستم فروش بسیار روان است و به صورت آفلاین عالی کار می‌کند. مدیریت موجودی ما در ۵ شعبه بسیار ساده شده است.", avatar: "https://ui-avatars.com/api/?name=Faisal+Nuri&background=10b981&color=fff", rating: 4 }
 ];
 
@@ -493,7 +523,7 @@ const postsFa: BlogPost[] = [
     author: { name: "احمد فواد", avatar: "https://ui-avatars.com/api/?name=Ahmad+Fawad&background=0D8ABC&color=fff", role: "مهندس ارشد" },
     category: "Tech",
     tags: ["فین‌تک", "حساب‌پی", "تجارت الکترونیک"],
-    publishedAt: "۲ آبان ۱۴۰۲",
+    publishedAt: "۲ عقرب ۱۴۰۲",
     readTime: "۵ دقیقه مطالعه",
     featured: true
   },
@@ -507,7 +537,7 @@ const postsFa: BlogPost[] = [
     author: { name: "سارا کریمی", avatar: "https://ui-avatars.com/api/?name=Sarah+Karimi&background=e91e63&color=fff", role: "معمار فرانت‌اند" },
     category: "Tutorial",
     tags: ["React", "Laravel", "معماری"],
-    publishedAt: "۱۱ آبان ۱۴۰۲",
+    publishedAt: "۱۱ عقرب ۱۴۰۲",
     readTime: "۸ دقیقه مطالعه"
   },
   {
@@ -520,28 +550,28 @@ const postsFa: BlogPost[] = [
     author: { name: "تیم ظبه سافت", avatar: "https://ui-avatars.com/api/?name=Zabah+Soft&background=10b981&color=fff", role: "محصول" },
     category: "Business",
     tags: ["هوش مصنوعی", "Gemini", "اتوماسیون"],
-    publishedAt: "۲۴ آبان ۱۴۰۲",
+    publishedAt: "۲۴ عقرب ۱۴۰۲",
     readTime: "۴ دقیقه مطالعه"
   }
 ];
 
 const faqsFa: FAQ[] = [
-  { q: "آیا پس از تحویل پروژه پشتیبانی فنی ارائه می‌دهید؟", a: "بله، تمام پکیج‌های سازمانی ما شامل ۳ تا ۱۲ ماه پشتیبانی فنی و نگهداری رایگان هستند." },
+  { q: "آیا پس از تحویل پروژه پشتیبانی فنی ارائه می‌دهید؟", a: "بله، تمام بسته‌های سازمانی ما شامل ۳ تا ۱۲ ماه پشتیبانی فنی و نگهداری رایگان هستند." },
   { q: "ادغام حساب‌پی چگونه کار می‌کند؟", a: "ما از API رسمی حساب‌پی برای تولید توکن‌های پرداخت امن استفاده می‌کنیم. وجوه مستقیماً و بلافاصله به کیف پول تجاری شما منتقل می‌شود." },
-  { q: "آیا می‌توانم بعداً پلن هاستینگ خود را ارتقا دهم؟", a: "قطعاً. زیرساخت ابری ما مقیاس‌پذیر است، به این معنی که با رشد ترافیک شما می‌توانید منابع بیشتری (CPU، RAM، فضا) اضافه کنید." },
+  { q: "آیا می‌توانم بعداً پلن میزبانی خود را ارتقا دهم؟", a: "قطعاً. زیرساخت ابری ما مقیاس‌پذیر است، به این معنی که با رشد ترافیک شما می‌توانید منابع بیشتری (CPU، RAM، فضا) اضافه کنید." },
   { q: "آیا دفتر فیزیکی دارید که بتوانم مراجعه کنم؟", a: "بله، می‌توانید در ساعات کاری (شنبه تا پنجشنبه، ۸ صبح تا ۵ عصر) به هر یک از شعب ما که در بالا لیست شده مراجعه کنید." }
 ];
 
 const branchesFa: Branch[] = [
   { id: 'kabul', nameKey: 'hq', city: 'کابل، افغانستان', address: 'شهر نو، چهارراهی انصاری، برج تجارت، طبقه ۴', phone: '+93 799 000 000', email: 'kabul@zabahsoft.com', mapQuery: 'Shahr-e-Naw,Kabul,Afghanistan' },
   { id: 'herat', nameKey: 'regionalHub', city: 'هرات، افغانستان', address: 'جاده بانک خون، مرکز IT، دفتر ۲۰۲', phone: '+93 700 111 222', email: 'herat@zabahsoft.com', mapQuery: 'Herat,Afghanistan' },
-  { id: 'dubai', nameKey: 'globalOffice', city: 'دبی، امارات', address: 'بیزینس بی، برج باینری، دفتر ۱۲۰۴', phone: '+971 50 123 4567', email: 'uae@zabahsoft.com', mapQuery: 'Business+Bay,Dubai' }
+  { id: 'dubai', nameKey: 'globalOffice', city: 'دبی، امارات', address: 'بیزنس بی، برج باینری، دفتر ۱۲۰۴', phone: '+971 50 123 4567', email: 'uae@zabahsoft.com', mapQuery: 'Business+Bay,Dubai' }
 ];
 
 const demosFa: WebDemo[] = [
-  { id: 1, title: "فروشگاه افغان‌مارت", category: "فروشگاه آنلاین", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Laravel", "HessabPay"], description: "یک بازار چندفروشنده کامل که برای بازار افغانستان طراحی شده است. شامل اعلان‌های پیامکی، ادغام حساب‌پی و داشبورد اختصاصی فروشنده." },
-  { id: 2, title: "لجستیک کابل کورپ", category: "شرکتی", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["Next.js", "Tailwind", "SEO"], description: "هویت شرکتی مدرن برای یک غول لجستیک. بهینه‌شده برای رتبه‌بندی بالای SEO با پرتال رهگیری مرسولات." },
-  { id: 3, title: "پرتال بیمارستان مد‌تک", category: "وب‌اپلیکیشن", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Node.js", "PostgreSQL"], description: "سیستم مدیریت بیمار امن با دسترسی نقش‌محور برای پزشکان، پرستاران و مدیران." }
+  { id: 1, title: "فروشگاه افغان‌مارت", category: "فروشگاه آنلاین", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.ecom.zabahsoft.com", tags: ["React", "Laravel", "HessabPay"], description: "یک بازار چندفروشنده کامل که برای بازار افغانستان طراحی شده است. شامل اعلان‌های پیامکی، ادغام حساب‌پی و داشبورد اختصاصی فروشنده.", client: "گروه افغان‌مارت", year: "۱۴۰۲" },
+  { id: 2, title: "لجستیک کابل کورپ", category: "شرکتی", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.logistics.zabahsoft.com", tags: ["Next.js", "Tailwind", "SEO"], description: "هویت شرکتی مدرن برای یک غول لجستیک. بهینه‌شده برای رتبه‌بندی بالای سئو با پورتال رهگیری مرسولات.", client: "لجستیک کابل", year: "۱۴۰۱" },
+  { id: 3, title: "پورتال بیمارستان مد‌تک", category: "وب‌اپلیکیشن", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.medtech.zabahsoft.com", tags: ["React", "Node.js", "PostgreSQL"], description: "سیستم مدیریت بیمار امن با دسترسی نقش‌محور برای پزشکان، پرستاران و مدیران.", client: "شفاخانه شهر", year: "۱۴۰۲" }
 ];
 
 // Pashto Data
@@ -692,14 +722,33 @@ const branchesPs: Branch[] = [
 ];
 
 const demosPs: WebDemo[] = [
-  { id: 1, title: "افغان مارټ پلورنځی", category: "آنلاین پلورنځی", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Laravel", "HessabPay"], description: "یو بشپړ څو پلورونکی بازار چې د افغان بازار لپاره ډیزاین شوی. د SMS خبرتیاوې، د حساب‌پی ادغام، او د پلورونکي وقف شوی ډشبورډ شامل دي." },
-  { id: 2, title: "کابل لوژستیک کارپوریشن", category: "کارپوریټ", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["Next.js", "Tailwind", "SEO"], description: "د لوژستیک لوی لپاره عصري کارپوریټ هویت. د بار وړلو تعقیب پورټل سره د لوړ SEO درجه بندي لپاره مطلوب." },
-  { id: 3, title: "میډټیک روغتون پورټل", category: "ویب غوښتنلیک", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", tags: ["React", "Node.js", "PostgreSQL"], description: "د ډاکټرانو، نرسانو، او مدیرانو لپاره د رول پراساس لاسرسي سره د ناروغ مدیریت خوندي سیسټم." }
+  { id: 1, title: "افغان مارټ پلورنځی", category: "آنلاین پلورنځی", image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.ecom.zabahsoft.com", tags: ["React", "Laravel", "HessabPay"], description: "یو بشپړ څو پلورونکی بازار چې د افغان بازار لپاره ډیزاین شوی. د SMS خبرتیاوې، د حساب‌پی ادغام، او د پلورونکي وقف شوی ډشبورډ شامل دي.", client: "افغان مارټ ګروپ", year: "۱۴۰۲" },
+  { id: 2, title: "کابل لوژستیک کارپوریشن", category: "کارپوریټ", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.logistics.zabahsoft.com", tags: ["Next.js", "Tailwind", "SEO"], description: "د لوژستیک لوی لپاره عصري کارپوریټ هویت. د بار وړلو تعقیب پورټل سره د لوړ SEO درجه بندي لپاره مطلوب.", client: "کابل لوژستیک", year: "۱۴۰۱" },
+  { id: 3, title: "میډټیک روغتون پورټل", category: "ویب غوښتنلیک", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", previewUrl: "https://demo.medtech.zabahsoft.com", tags: ["React", "Node.js", "PostgreSQL"], description: "د ډاکټرانو، نرسانو، او مدیرانو لپاره د رول پراساس لاسرسي سره د ناروغ مدیریت خوندي سیسټم.", client: "ښار روغتون", year: "۱۴۰۲" }
 ];
 
 export const translations = {
   en: {
     ...baseEn,
+    
+    // Updated Web Solutions Translations
+    webHeroTitle: "Create Your Website Now",
+    webHeroSubtitle: "From high-performance corporate sites to complex web applications, we build solutions that drive growth. Get started today with our all-in-one packages.",
+    
+    // Stats
+    statClients: "Enterprise Clients",
+    statUptime: "Uptime Guarantee",
+    statDelivery: "Avg. Delivery",
+    statSupport: "Support",
+
+    // Packages
+    webPackagesTitle: "All-in-One Web Packages",
+    webPackagesDesc: "Everything you need to get online. Includes Hosting, Domain, and Official Emails.",
+    pkgStarter: "Starter Kit",
+    pkgBusiness: "Professional",
+    pkgEnterprise: "Enterprise",
+    pkgIncluded: "Everything Included:",
+
     servicesList: servicesEn,
     blogPosts: postsEn,
     contactFaqs: faqsEn,
@@ -715,10 +764,30 @@ export const translations = {
     dashboard: "داشبورد",
     blog: "وبلاگ",
     contactNav: "تماس",
-    login: "ورود",
+    login: "ورود به سیستم",
     logout: "خروج",
     
-    // Auth
+    // ... (previous fa translations)
+    
+    // Updated Web Solutions Translations
+    webHeroTitle: "همین حالا وب‌سایت خود را بسازید",
+    webHeroSubtitle: "از سایت‌های شرکتی پرسرعت تا وب‌اپلیکیشن‌های پیچیده، ما راهکارهایی می‌سازیم که باعث رشد می‌شوند. امروز با بسته‌های کامل ما شروع کنید.",
+    
+    // Stats
+    statClients: "مشتریان سازمانی",
+    statUptime: "تضمین آپ‌تایم",
+    statDelivery: "میانگین تحویل",
+    statSupport: "پشتیبانی",
+
+    // Packages
+    webPackagesTitle: "بسته‌های کامل طراحی وب",
+    webPackagesDesc: "هر آنچه برای آنلاین شدن نیاز دارید. شامل میزبانی، دامنه و ایمیل‌های رسمی.",
+    pkgStarter: "بسته شروع",
+    pkgBusiness: "بسته حرفه‌ای",
+    pkgEnterprise: "راهکار سازمانی",
+    pkgIncluded: "همه‌چیز شامل:",
+
+    // ... (rest of fa translations)
     register: "ثبت‌نام",
     createAccount: "ایجاد حساب کاربری",
     confirmPassword: "تکرار رمز عبور",
@@ -726,14 +795,13 @@ export const translations = {
     dontHaveAccount: "تازه‌وارد هستید؟",
     termsAgree: "با ایجاد حساب، شما موافقت می‌کنید با",
     authTitle: "ورود به ظبه سافت",
-    authDesc: "مدیریت هاستینگ، ایمیل‌ها و راهکارهای سازمانی.",
+    authDesc: "مدیریت میزبانی وب، ایمیل‌ها و راهکارهای سازمانی.",
     passForgot: "رمز عبور را فراموش کردید؟",
     authFooterTerms: "قوانین",
     authFooterPrivacy: "حریم خصوصی",
     authFooterSecurity: "امنیت",
     authFooterContact: "تماس با پشتیبانی",
     
-    // New Nav
     navWeb: "طراحی وب",
     navHosting: "میزبانی وب",
     navEmails: "ایمیل رسمی",
@@ -765,6 +833,12 @@ export const translations = {
     total: "مبلغ قابل پرداخت",
     selectPayment: "روش پرداخت",
     
+    accountRequired: "حساب کاربری الزامی است",
+    loginToOrder: "برای مدیریت لایسنس‌ها و پیگیری این سفارش، لطفاً وارد شوید یا حساب کاربری ایجاد کنید.",
+    hessabPayDesc: "پرداخت آنی افغانی",
+    stripeDesc: "پرداخت امن بین‌المللی",
+    sslSecure: "امن و رمزگذاری شده با SSL",
+
     welcomeBack: "خوش آمدید",
     activeServices: "سرویس‌های فعال",
     recentOrders: "تاریخچه صورتحساب",
@@ -790,8 +864,6 @@ export const translations = {
     chatDisclaimer: "هوش مصنوعی. اطلاعات حیاتی را بررسی کنید.",
     typeMessage: "پیام خود را بنویسید...",
 
-    webHeroTitle: "خلق تجربیات دیجیتال",
-    webHeroSubtitle: "از سایت‌های شرکتی پرسرعت تا وب‌اپلیکیشن‌های پیچیده، ما راهکارهایی می‌سازیم که باعث رشد می‌شوند.",
     webDemosTitle: "پروژه‌های منتخب و دموها",
     webDemosDesc: "نمونه کارهای اخیر و قالب‌های موجود ما را بررسی کنید. برای مشاهده زنده کلیک کنید.",
     webProcess: "فرآیند توسعه ما",
@@ -800,7 +872,6 @@ export const translations = {
     viewDemo: "مشاهده دمو زنده",
     closeDemo: "بستن پیش‌نمایش",
     
-    // Official Emails
     officialHeroTitle: "هویت دیجیتال خود را امن کنید",
     officialHeroSubtitle: "آدرس‌های ایمیل رسمی (شما@شرکت‌شما.com) و خدمات ثبت دامنه برای کسب‌وکارهای افغان.",
     officialBtnCheck: "بررسی موجودی",
@@ -818,7 +889,6 @@ export const translations = {
     emailPlansTitle: "پکیج‌های میزبانی ایمیل",
     claimNow: "ثبت کنید",
 
-    // Hosting Page
     hostingHeroTitle: "میزبانی ابری پرسرعت",
     hostingHeroSubtitle: "راهکارهای میزبانی مطمئن، امن و سریع برای کسب‌وکار شما. شروع از فقط ۵۹ دلار در سال.",
     hostingBtnPlans: "مشاهده پلن‌های میزبانی",
@@ -837,7 +907,6 @@ export const translations = {
     completeOrder: "تکمیل سفارش",
     processing: "در حال پردازش...",
 
-    // Common Features
     featStorage: "فضای ذخیره‌سازی",
     featEmails: "حساب‌های ایمیل",
     featWebsites: "وب‌سایت",
@@ -850,6 +919,9 @@ export const translations = {
     featSecurity: "امنیت پیشرفته",
     featSpam: "محافظت ضد اسپم",
     featWebmail: "دسترسی وب‌میل",
+    featDomain: "دامنه رایگان (.com)",
+    featDesign: "طراحی ریسپانسیو",
+    featSEO: "سئو پایه",
 
     bestValue: "بهترین انتخاب",
     mostPopular: "محبوب‌ترین",
@@ -877,6 +949,11 @@ export const translations = {
     optLanding: "لندینگ پیج",
     optOther: "سایر / سفارشی",
 
+    budgetLow: "کمتر از ۱۰۰۰ دلار",
+    budgetMedium: "۱۰۰۰ - ۵۰۰۰ دلار",
+    budgetHigh: "۵۰۰۰ - ۱۰,۰۰۰ دلار",
+    budgetEnterprise: "بالای ۱۰,۰۰۰ دلار",
+
     blogHeroTitle: "بینش و اخبار",
     blogHeroSubtitle: "آخرین اخبار، تکنولوژی‌ها و منابع آموزشی از تیم مهندسی ظبه سافت.",
     readMore: "مطالعه مقاله",
@@ -903,10 +980,9 @@ export const translations = {
     viewOnMap: "نمایش روی نقشه",
     faqTitle: "سوالات متداول",
 
-    // New Sections: Testimonials & Partners
     partnersTitle: "همکاری‌های استراتژیک",
     partnersDesc: "قدرت بخشیدن به زیرساخت‌های دیجیتال موسسات پیشرو افغانستان.",
-    testimonialsTitle: "آنچه مشتریان ما می‌گویند",
+    testimonialsTitle: "نظرات مشتریان ما",
     testimonialsSubtitle: "مورد اعتماد بیش از ۵۰۰ کسب‌وکار، از استارتاپ‌ها تا وزارتخانه‌های دولتی.",
 
     theme: "تم",
@@ -941,15 +1017,35 @@ export const translations = {
   ps: {
     ...baseEn,
     brandName: "ظبه سافت",
-    home: "کور",
+    home: "کور پاڼه",
     services: "حل لارې",
     dashboard: "ډشبورډ",
     blog: "بلاګ",
     contactNav: "اړیکه",
-    login: "ننوتل",
+    login: "سیستم ته ننوتل",
     logout: "وتل",
     
-    // Auth
+    // ... (previous ps translations)
+
+    // Updated Web Solutions Translations
+    webHeroTitle: "خپله ویب پاڼه همدا اوس جوړه کړئ",
+    webHeroSubtitle: "د لوړ فعالیت شرکت سایټونو څخه تر پیچلو ویب غوښتنلیکونو پورې، موږ داسې حلونه رامینځته کوو چې وده هڅوي. نن ورځ زموږ د ټولو کڅوړو سره پیل کړئ.",
+    
+    // Stats
+    statClients: "سازمانی پیرودونکي",
+    statUptime: "د فعال وخت تضمین",
+    statDelivery: "اوسط تحویل",
+    statSupport: "ملاتړ",
+
+    // Packages
+    webPackagesTitle: "د ویب ټولې کڅوړې",
+    webPackagesDesc: "هرڅه چې تاسو آنلاین ترلاسه کولو ته اړتیا لرئ. کوربه توب، ډومین، او رسمي بریښنالیکونه شامل دي.",
+    pkgStarter: "د پیل کڅوړه",
+    pkgBusiness: "مسلکي کڅوړه",
+    pkgEnterprise: "د تشبث حل",
+    pkgIncluded: "هرڅه شامل دي:",
+
+    // ... (rest of ps translations)
     register: "نوم لیکنه",
     createAccount: "حساب جوړ کړئ",
     confirmPassword: "پټنوم تایید کړئ",
@@ -964,7 +1060,6 @@ export const translations = {
     authFooterSecurity: "امنیت",
     authFooterContact: "د ملاتړ سره اړیکه",
 
-    // New Nav
     navWeb: "ویب ډیزاین",
     navHosting: "کوربه توب",
     navEmails: "رسمي بریښنالیک",
@@ -996,6 +1091,12 @@ export const translations = {
     total: "د تادیې وړ مقدار",
     selectPayment: "د تادیې طریقه",
     
+    accountRequired: "حساب ته اړتیا ده",
+    loginToOrder: "د جوازونو اداره کولو او د دې امر تعقیب لپاره، مهرباني وکړئ لاسلیک وکړئ یا یو حساب جوړ کړئ.",
+    hessabPayDesc: "سمدستي افغانۍ تادیه",
+    stripeDesc: "خوندي نړیواله تادیه",
+    sslSecure: "د SSL سره خوندي او کوډ شوی",
+
     welcomeBack: "ښه راغلاست",
     activeServices: "فعال خدمتونه",
     recentOrders: "د بلینګ تاریخ",
@@ -1021,8 +1122,6 @@ export const translations = {
     chatDisclaimer: "AI ځواکمن. مهم معلومات تایید کړئ.",
     typeMessage: "یو پیغام ولیکئ...",
 
-    webHeroTitle: "د ډیجیټل تجربو رامینځته کول",
-    webHeroSubtitle: "د لوړ فعالیت شرکت سایټونو څخه تر پیچلو ویب غوښتنلیکونو پورې، موږ داسې حلونه رامینځته کوو چې وده هڅوي.",
     webDemosTitle: "ځانګړي شوي پروژې او ډیموګانې",
     webDemosDesc: "زموږ وروستي کار او موجود ټیمپلیټونه وپلټئ.",
     webProcess: "زموږ د پراختیا پروسه",
@@ -1031,7 +1130,6 @@ export const translations = {
     viewDemo: "ژوندۍ ډیمو وګورئ",
     closeDemo: "مخکتنه بند کړئ",
     
-    // Official Emails
     officialHeroTitle: "خپل ډیجیټل پیژند خوندي کړئ",
     officialHeroSubtitle: "د افغان سوداګرۍ لپاره مسلکي بریښنالیک پتې (تاسو@ستاسو_شرکت.com) او د ډومین ثبتولو خدمات.",
     officialBtnCheck: "د شتون چیک کول",
@@ -1049,7 +1147,6 @@ export const translations = {
     emailPlansTitle: "د بریښنالیک کوربه توب کڅوړې",
     claimNow: "اوس ترلاسه کړئ",
 
-    // Hosting Page
     hostingHeroTitle: "د لوړ فعالیت کلاوډ کوربه توب",
     hostingHeroSubtitle: "ستاسو د سوداګرۍ لپاره د اعتماد وړ، خوندي، او ګړندي کوربه توب حلونه. په کال کې یوازې $ 59 ډالرو څخه پیل کیږي.",
     hostingBtnPlans: "د کوربه توب پلانونه وګورئ",
@@ -1068,7 +1165,6 @@ export const translations = {
     completeOrder: "امر بشپړ کړئ",
     processing: "د پروسس په حال کې...",
 
-    // Common Features
     featStorage: "ذخیره کول",
     featEmails: "بریښنالیک حسابونه",
     featWebsites: "ویب پاڼې",
@@ -1081,6 +1177,9 @@ export const translations = {
     featSecurity: "پرمختللی امنیت",
     featSpam: "د سپیم محافظت",
     featWebmail: "ویب میل لاسرسی",
+    featDomain: "وړیا ډومین (.com)",
+    featDesign: "ځواب ویونکی ډیزاین",
+    featSEO: "لومړنی SEO",
 
     bestValue: "غوره ارزښت",
     mostPopular: "خورا مشهور",
@@ -1108,6 +1207,11 @@ export const translations = {
     optLanding: "د لینډینګ پاڼه",
     optOther: "نور / دودیز",
 
+    budgetLow: "له ۱۰۰۰ ډالرو څخه کم",
+    budgetMedium: "۱۰۰۰ - ۵۰۰۰ ډالر",
+    budgetHigh: "۵۰۰۰ - ۱۰،۰۰۰ ډالر",
+    budgetEnterprise: "۱۰،۰۰۰ ډالر+",
+
     blogHeroTitle: "لید او خبرونه",
     blogHeroSubtitle: "د ظبه سافت انجینرۍ ټیم څخه وروستي خبرونه، ټیکنالوژي او سرچینې.",
     readMore: "مقاله ولولئ",
@@ -1134,14 +1238,13 @@ export const translations = {
     viewOnMap: "په نقشه کې وګورئ",
     faqTitle: "په مکرر ډول پوښتل شوي پوښتنې",
 
-    // New Sections
     partnersTitle: "ستراتیژیکې همکارۍ",
     partnersDesc: "د افغانستان د مخکښو ادارو ډیجیټل زیربنا پیاوړي کول.",
     testimonialsTitle: "زموږ پیرودونکي څه وايي",
     testimonialsSubtitle: "د ۵۰۰ څخه زیاتو سوداګریو لخوا باوري، له سټارټ اپ څخه تر دولتي وزارتونو پورې.",
 
-    theme: "ټیم",
-    light: "رڼا",
+    theme: "تم",
+    light: "روښانه",
     dark: "تور",
 
     ftProduct: "محصول",
