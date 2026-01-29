@@ -4,8 +4,23 @@ export type Language = 'en' | 'fa' | 'ps';
 export enum ServiceType {
   WEB = 'Web Development',
   DB = 'Database Solutions',
-  SOFT = 'Custom Software'
+  SOFT = 'Custom Software',
+  DOMAIN = 'Domain Registration'
 }
+
+export enum UserRole {
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  EDITOR = 'EDITOR',
+  VIEWER = 'VIEWER'
+}
+
+export type Permission = 
+  | 'MANAGE_USERS' 
+  | 'VIEW_REPORTS' 
+  | 'MANAGE_SERVICES' 
+  | 'MANAGE_BILLING' 
+  | 'SYSTEM_SETTINGS';
 
 export interface Service {
   id: number;
@@ -22,6 +37,7 @@ export interface Service {
 
 export interface Order {
   id: string;
+  userId: number;
   service_id: number;
   service_name: string;
   status: 'pending' | 'completed' | 'cancelled';
@@ -29,6 +45,8 @@ export interface Order {
   amount_paid: string;
   date: string;
   license_key?: string;
+  whatsapp_notified?: boolean;
+  domain_name?: string;
 }
 
 export interface User {
@@ -36,6 +54,11 @@ export interface User {
   name: string;
   email: string;
   phone: string;
+  whatsapp: string; // WhatsApp integration
+  role: UserRole;
+  permissions: Permission[];
+  avatar?: string;
+  lastLogin?: string;
 }
 
 export interface ChatMessage {
@@ -52,7 +75,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // HTML string for rich text
+  content: string;
   coverImage: string;
   author: {
     name: string;
@@ -62,18 +85,31 @@ export interface BlogPost {
   category: BlogCategory;
   tags: string[];
   publishedAt: string;
-  readTime: string; // e.g. "5 min read"
+  readTime: string;
   featured?: boolean;
 }
 
 export interface Branch {
   id: string;
-  nameKey: string; // used for title translation lookup
+  nameKey: string;
   city: string;
   address: string;
   phone: string;
   email: string;
   mapQuery: string;
+}
+
+export type ContributionType = 'SUCCESS_STORY' | 'FEATURE_REQUEST' | 'FEEDBACK';
+
+export interface Contribution {
+  id: string;
+  userId: number;
+  userName: string;
+  type: ContributionType;
+  title: string;
+  content: string;
+  status: 'pending' | 'approved' | 'implemented' | 'archived';
+  date: string;
 }
 
 export interface FAQ {
@@ -86,7 +122,7 @@ export interface WebDemo {
   title: string;
   category: string;
   image: string;
-  previewUrl: string; // New field for iframe
+  previewUrl: string;
   tags: string[];
   description: string;
   client?: string;

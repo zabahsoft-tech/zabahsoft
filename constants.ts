@@ -19,6 +19,23 @@ export const MOCK_SERVICES: Service[] = [
     ]
   },
   {
+    id: 6,
+    name: ".AF Domain Registration",
+    description: "Secure your unique Afghan identity with a professional .af or .com.af domain name.",
+    type: ServiceType.DOMAIN,
+    price_afn: 2500,
+    price_usd: 35,
+    features: ["Instant DNS Propagation", "Whois Privacy", "Domain Lock", "24/7 Support"],
+    icon: "fas fa-globe",
+    badge: "Official",
+    specs: [
+      { label: "Extension", value: ".af / .com.af" },
+      { label: "Term", value: "1 Year" },
+      { label: "Transfer", value: "Free" },
+      { label: "Management", value: "Dashboard Included" }
+    ]
+  },
+  {
     id: 2,
     name: "E-Commerce Platform",
     description: "Full-featured online store with payment gateways, inventory management, and analytics.",

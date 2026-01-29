@@ -1,10 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import { api } from '../services/api';
+import { Service, ServiceType } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 const OfficialServices: React.FC = () => {
   const { t, dir } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const [domain, setDomain] = useState('');
+  const [extension, setExtension] = useState('.af');
   const [isChecking, setIsChecking] = useState(false);
   const [availability, setAvailability] = useState<'none' | 'available' | 'taken'>('none');
   const [checkedDomain, setCheckedDomain] = useState('');
@@ -17,6 +25,20 @@ const OfficialServices: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [domainService, setDomainService] = useState<Service | null>(null);
+
+  useEffect(() => {
+    const fetchDomainService = async () => {
+      const services = await api.getServices();
+      const ds = services.find(s => s.type === ServiceType.DOMAIN);
+      if (ds) setDomainService(ds);
+    };
+    fetchDomainService();
+    
+    if (user) {
+      setFormState(prev => ({ ...prev, name: user.name, email: user.email }));
+    }
+  }, [user]);
 
   const checkDomainAvailability = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,22 +49,36 @@ const OfficialServices: React.FC = () => {
     
     // Simulate API call
     setTimeout(() => {
-      const takenDomains = ['zabahsoft.com', 'google.com', 'facebook.com', 'example.com'];
+      const takenDomains = ['zabahsoft', 'google', 'facebook', 'example', 'mof', 'gov', 'afghanistan'];
       const isTaken = takenDomains.some(d => domain.toLowerCase().includes(d));
       
       setAvailability(isTaken ? 'taken' : 'available');
-      setCheckedDomain(domain);
+      setCheckedDomain(`${domain}${extension}`);
       setIsChecking(false);
     }, 1500);
   };
 
-  const handleOrder = (e: React.FormEvent) => {
+  const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      if (domainService) {
+        await api.createOrder(domainService.id, 'hessabpay', {
+          domain: checkedDomain,
+          contact: formState
+        });
+        setSubmitted(true);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1500);
+    }
   };
 
   const plans = [
@@ -92,7 +128,7 @@ const OfficialServices: React.FC = () => {
         </div>
       </section>
 
-      {/* Domain Checker */}
+      {/* Domain Checker & Ordering System */}
       <section id="domain-check" className="py-24 px-4 w-full bg-white dark:bg-[#0d1117] border-y border-gray-200 dark:border-gray-800">
          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
@@ -100,56 +136,109 @@ const OfficialServices: React.FC = () => {
                 <p className="text-gray-500 dark:text-gray-400">{t.domainCheckDesc}</p>
             </div>
 
-            <div className="bg-gray-50 dark:bg-[#161b22] p-3 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-2 animate-fade-in-up opacity-0" style={{animationDelay: '0.4s'}}>
-                <div className="flex-grow w-full relative">
-                    <div className={`absolute top-1/2 -translate-y-1/2 ${dir === 'rtl' ? 'left-6' : 'right-6'} text-gray-400 dark:text-gray-500`}>
-                        <i className="fas fa-search text-xl"></i>
-                    </div>
+            <div className="bg-gray-50 dark:bg-[#161b22] p-3 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-4 animate-fade-in-up opacity-0" style={{animationDelay: '0.4s'}}>
+                <div className="flex-grow w-full relative flex items-center">
                     <input 
                         type="text" 
                         value={domain}
                         onChange={(e) => setDomain(e.target.value)}
-                        placeholder={t.domainPlaceholder}
+                        placeholder="yourcompany"
                         className="w-full bg-transparent text-xl px-6 py-5 outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
                     />
+                    <div className="shrink-0 pr-4">
+                        <select 
+                            value={extension} 
+                            onChange={(e) => setExtension(e.target.value)}
+                            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 font-bold text-blue-600 dark:text-blue-400 outline-none cursor-pointer"
+                        >
+                            <option value=".af">.af</option>
+                            <option value=".com.af">.com.af</option>
+                            <option value=".net.af">.net.af</option>
+                            <option value=".org.af">.org.af</option>
+                            <option value=".com">.com</option>
+                        </select>
+                    </div>
                 </div>
                 <button 
                     onClick={checkDomainAvailability}
                     disabled={isChecking || !domain}
-                    className="w-full md:w-auto px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-black dark:hover:bg-gray-200 transition-colors disabled:opacity-50 text-lg shadow-md"
+                    className="w-full md:w-auto px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-black dark:hover:bg-gray-200 transition-colors disabled:opacity-50 text-lg shadow-md whitespace-nowrap"
                 >
                     {isChecking ? <i className="fas fa-spinner fa-spin"></i> : t.domainSearch}
                 </button>
             </div>
 
-            {/* Result Alert */}
+            {/* Result Alert & Registration Flow */}
             {availability !== 'none' && (
-                <div className={`mt-8 p-6 rounded-2xl border flex items-center justify-center gap-4 animate-scale-in ${
+                <div className={`mt-8 p-8 rounded-3xl border animate-scale-in flex flex-col gap-6 shadow-lg ${
                     availability === 'available' 
-                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400' 
-                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'
+                    ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800' 
+                    : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
                 }`}>
-                    <i className={`fas ${availability === 'available' ? 'fa-check-circle' : 'fa-times-circle'} text-2xl`}></i>
-                    <span className="font-bold text-xl">
-                        {checkedDomain} {availability === 'available' ? t.domainAvailable : t.domainTaken}
-                    </span>
-                    {availability === 'available' && (
-                        <button 
-                            onClick={() => document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="ml-4 px-6 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-bold shadow-lg transition-colors"
-                        >
-                            {t.claimNow}
-                        </button>
+                    <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${availability === 'available' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                            <i className={`fas ${availability === 'available' ? 'fa-check' : 'fa-times'}`}></i>
+                        </div>
+                        <div>
+                            <p className={`text-2xl font-bold ${availability === 'available' ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
+                                {checkedDomain} {availability === 'available' ? t.domainAvailable : t.domainTaken}
+                            </p>
+                            {availability === 'available' && <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Starting at only $35/year including management dashboard.</p>}
+                        </div>
+                    </div>
+
+                    {availability === 'available' && !submitted && (
+                        <div className="pt-6 border-t border-green-200 dark:border-green-800/30">
+                            <h4 className="font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-wider text-xs">Registration Details</h4>
+                            <form onSubmit={handleOrder} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input 
+                                    required 
+                                    type="text" 
+                                    placeholder={t.lblFullName} 
+                                    value={formState.name} 
+                                    onChange={e => setFormState({...formState, name: e.target.value})}
+                                    className="bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                                />
+                                <input 
+                                    required 
+                                    type="email" 
+                                    placeholder={t.lblEmail} 
+                                    value={formState.email} 
+                                    onChange={e => setFormState({...formState, email: e.target.value})}
+                                    className="bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                                />
+                                <div className="md:col-span-2">
+                                    <button 
+                                        disabled={isSubmitting}
+                                        className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+                                    >
+                                        {isSubmitting ? <i className="fas fa-spinner fa-spin"></i> : <>{t.claimNow} ({checkedDomain})</>}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    {submitted && (
+                         <div className="text-center py-6 animate-fade-in-up">
+                            <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-4"><i className="fas fa-receipt"></i></div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t.orderReceived}</h3>
+                            <p className="text-gray-500 dark:text-gray-400">Our team will verify <b>{checkedDomain}</b> and send your invoice shortly.</p>
+                            <button onClick={() => setSubmitted(false)} className="mt-4 text-green-600 font-bold hover:underline">Check another domain</button>
+                         </div>
                     )}
                 </div>
             )}
          </div>
       </section>
 
-      {/* Pricing Plans */}
+      {/* Official Email Plans */}
       <section id="plans" className="py-24 px-4 bg-gray-50 dark:bg-[#161b22]">
          <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-16 text-gray-900 dark:text-white animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>{t.emailPlansTitle}</h2>
+            <div className="text-center mb-16 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.emailPlansTitle}</h2>
+                <p className="text-gray-500 dark:text-gray-400">Combine your domain with enterprise-grade official email hosting.</p>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                {plans.map((plan, i) => (
@@ -183,10 +272,6 @@ const OfficialServices: React.FC = () => {
                         </ul>
                         
                         <button 
-                            onClick={() => {
-                            setFormState({...formState, plan: plan.name});
-                            document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' });
-                            }}
                             className={`w-full py-4 rounded-xl font-bold text-lg transition-colors ${plan.popular ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg' : 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/10'}`}
                         >
                             {t.planBtn}
@@ -195,84 +280,6 @@ const OfficialServices: React.FC = () => {
                   </div>
                ))}
             </div>
-         </div>
-      </section>
-
-      {/* Order Form */}
-      <section id="order-form" className="py-24 px-4 bg-white dark:bg-[#0d1117] border-t border-gray-200 dark:border-gray-800">
-         <div className="max-w-3xl mx-auto">
-            {submitted ? (
-                <div className="bg-white dark:bg-[#161b22] border border-green-500/50 rounded-3xl p-12 text-center animate-fade-in-up shadow-2xl">
-                    <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 border border-green-500/30">
-                        <i className="fas fa-check"></i>
-                    </div>
-                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t.orderReceived}</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
-                        {t.orderReceivedMsg} <b>{formState.plan}</b>{domain ? ` (${domain})` : ''}.
-                    </p>
-                    <button onClick={() => setSubmitted(false)} className="text-green-600 dark:text-green-400 font-bold hover:underline">{t.submitAnother}</button>
-                </div>
-            ) : (
-                <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 md:p-14 shadow-2xl animate-fade-in-up">
-                    <h2 className="text-3xl font-bold mb-10 text-center text-gray-900 dark:text-white">{t.completeOrder}</h2>
-                    <form onSubmit={handleOrder} className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-3 tracking-wider">{t.lblFullName}</label>
-                                <input 
-                                    required 
-                                    type="text" 
-                                    value={formState.name}
-                                    onChange={(e) => setFormState({...formState, name: e.target.value})}
-                                    className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-xl px-5 py-4 text-gray-900 dark:text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-3 tracking-wider">{t.lblCompany}</label>
-                                <input 
-                                    type="text" 
-                                    value={formState.company}
-                                    onChange={(e) => setFormState({...formState, company: e.target.value})}
-                                    className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-xl px-5 py-4 text-gray-900 dark:text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-3 tracking-wider">{t.lblEmail}</label>
-                            <input 
-                                required 
-                                type="email" 
-                                value={formState.email}
-                                onChange={(e) => setFormState({...formState, email: e.target.value})}
-                                className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-xl px-5 py-4 text-gray-900 dark:text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
-                            />
-                        </div>
-
-                        <div className="p-6 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30">
-                            <h4 className="font-bold text-blue-600 dark:text-blue-300 mb-3 text-sm uppercase">Summary</h4>
-                            <div className="flex justify-between text-base mb-2">
-                                <span className="text-gray-500 dark:text-gray-400">Plan:</span>
-                                <span className="font-bold text-gray-900 dark:text-white">{formState.plan}</span>
-                            </div>
-                            {domain && (
-                                <div className="flex justify-between text-base">
-                                <span className="text-gray-500 dark:text-gray-400">Domain:</span>
-                                <span className="font-bold text-gray-900 dark:text-white">{domain}</span>
-                                </div>
-                            )}
-                        </div>
-
-                        <button 
-                            type="submit" 
-                            disabled={isSubmitting}
-                            className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold py-5 rounded-xl hover:bg-black dark:hover:bg-gray-200 transition-colors disabled:opacity-50 text-lg shadow-lg"
-                        >
-                            {isSubmitting ? t.processing : 'Submit Order'}
-                        </button>
-                    </form>
-                </div>
-            )}
          </div>
       </section>
 

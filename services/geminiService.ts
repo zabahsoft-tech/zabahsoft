@@ -5,6 +5,7 @@ let aiClient: GoogleGenAI | null = null;
 
 // Initialize the client safely
 try {
+  // Always initialize using new GoogleGenAI({ apiKey: process.env.API_KEY })
   if (process.env.API_KEY) {
     aiClient = new GoogleGenAI({ apiKey: process.env.API_KEY });
   } else {
@@ -41,7 +42,8 @@ export const sendMessageToGemini = async (message: string, history: {role: strin
   }
 
   try {
-    const model = "gemini-2.5-flash";
+    // Using gemini-3-flash-preview for basic text and reasoning tasks
+    const model = "gemini-3-flash-preview";
     const chat = aiClient.chats.create({
       model: model,
       config: {
@@ -52,6 +54,7 @@ export const sendMessageToGemini = async (message: string, history: {role: strin
 
     const response = await chat.sendMessage({ message });
     
+    // Access the .text property directly (not a method call) as per GenerateContentResponse definition
     if (response.text) {
         return response.text;
     }
