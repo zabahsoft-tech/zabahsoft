@@ -8,6 +8,7 @@ import { api } from '../services/api';
 const Blog: React.FC = () => {
   const { t, dir } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | 'All'>('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,11 +27,26 @@ const Blog: React.FC = () => {
     loadPosts();
   }, [t.blogPosts]);
 
-  const featuredPost = posts.find(p => p.featured) || posts[0];
-  const filteredPosts = posts.filter(p => selectedCategory === 'All' || p.category === selectedCategory);
+  const filteredPosts = posts.filter(p => {
+    const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = searchQuery === '' || 
+      p.title.toLowerCase().includes(searchLower) || 
+      p.excerpt.toLowerCase().includes(searchLower) ||
+      p.tags.some(tag => tag.toLowerCase().includes(searchLower));
+    
+    return matchesCategory && matchesSearch;
+  });
+
+  // When searching or filtering by category, we adjust how we show the "featured" content
+  // If we have a search query, we treat all results as a grid for better clarity
+  const isSearching = searchQuery.length > 0;
+  const featuredPost = !isSearching && selectedCategory === 'All' 
+    ? filteredPosts.find(p => p.featured) || filteredPosts[0]
+    : null;
   
-  const gridPosts = selectedCategory === 'All' 
-    ? filteredPosts.filter(p => p.id !== featuredPost?.id)
+  const gridPosts = featuredPost 
+    ? filteredPosts.filter(p => p.id !== featuredPost.id)
     : filteredPosts;
 
   const categories: (BlogCategory | 'All')[] = ['All', 'Tech', 'Business', 'Tutorial', 'News'];
@@ -48,11 +64,37 @@ const Blog: React.FC = () => {
             <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
                Guides, updates, and deep dives into technology, software architecture, and the digital economy in Afghanistan.
             </p>
+
+            {/* Search Bar */}
+            <div className="max-w-xl mx-auto mb-8 animate-fade-in-up">
+              <div className="relative group">
+                <div className={`absolute inset-y-0 ${dir === 'rtl' ? 'right-5' : 'left-5'} flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors`}>
+                  <i className="fas fa-search"></i>
+                </div>
+                <input 
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t.search || "Search articles..."}
+                  className={`w-full bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-full py-4 ${dir === 'rtl' ? 'pr-12 pl-6' : 'pl-12 pr-6'} text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm group-hover:border-gray-300 dark:group-hover:border-gray-700`}
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    className={`absolute inset-y-0 ${dir === 'rtl' ? 'left-4' : 'right-4'} flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors`}
+                  >
+                    <i className="fas fa-times-circle"></i>
+                  </button>
+                )}
+              </div>
+            </div>
             
             {/* Category Filter */}
             <div className="flex flex-wrap justify-center gap-3">
                {categories.map(cat => {
-                  const count = cat === 'All' ? posts.length : posts.filter(p => p.category === cat).length;
+                  const count = cat === 'All' 
+                    ? posts.length 
+                    : posts.filter(p => p.category === cat).length;
                   return (
                     <button
                       key={cat}
@@ -86,8 +128,18 @@ const Blog: React.FC = () => {
              </div>
          ) : (
              <>
-                {/* Featured Post (Only show on 'All' to emphasize featured status) */}
-                {selectedCategory === 'All' && featuredPost && (
+                {/* Search Results Metadata */}
+                {searchQuery && (
+                  <div className="mb-8 flex items-center justify-between animate-fade-in">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Showing {filteredPosts.length} results for <span className="text-gray-900 dark:text-white font-bold">"{searchQuery}"</span>
+                    </p>
+                    <button onClick={() => setSearchQuery('')} className="text-xs font-bold text-blue-600 hover:underline">Clear search</button>
+                  </div>
+                )}
+
+                {/* Featured Post (Only show on 'All' and when not searching) */}
+                {featuredPost && (
                     <Link to={`/blog/${featuredPost.id}`} className="block group mb-20 animate-fade-in-up">
                         <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xl flex flex-col md:flex-row hover:border-blue-500/50 transition-all duration-300">
                         <div className="md:w-3/5 relative h-[300px] md:h-auto overflow-hidden">
@@ -151,18 +203,23 @@ const Blog: React.FC = () => {
                 ))}
                 </div>
                 
-                {gridPosts.length === 0 && !isLoading && (
+                {filteredPosts.length === 0 && !isLoading && (
                 <div className="text-center py-32 animate-fade-in">
                     <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800/50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-6">
                        <i className="fas fa-search text-3xl"></i>
                     </div>
                     <p className="text-xl font-bold text-gray-900 dark:text-white mb-2">No articles found</p>
-                    <p className="text-gray-500">There are no posts currently published in the <b className="text-blue-600">{selectedCategory}</b> category.</p>
+                    <p className="text-gray-500">
+                      {searchQuery 
+                        ? `We couldn't find anything matching "${searchQuery}" in ${selectedCategory === 'All' ? 'our blog' : 'the ' + selectedCategory + ' category'}.`
+                        : `There are no posts currently published in the ${selectedCategory} category.`
+                      }
+                    </p>
                     <button 
-                      onClick={() => setSelectedCategory('All')}
+                      onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
                       className="mt-8 text-blue-600 font-bold hover:underline"
                     >
-                      View all posts
+                      Clear all filters
                     </button>
                 </div>
                 )}

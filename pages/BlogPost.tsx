@@ -20,15 +20,34 @@ const BlogPost: React.FC = () => {
         const found = posts.find(p => p.id === id || p.slug === id);
         if (found) {
           setPost(found);
-          // High SEO: Update page title and description
+          
+          // --- SEO Start ---
+          const originalTitle = document.title;
+          const originalDescription = document.querySelector('meta[name="description"]')?.getAttribute('content');
+          
+          // Update Page Title
           document.title = `${found.title} | ZabahSoft Blog`;
           
-          // Update meta description if possible (SPA limitation helper)
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', found.excerpt);
+          // Update Meta Description
+          let metaDesc = document.querySelector('meta[name="description"]');
+          if (!metaDesc) {
+            metaDesc = document.createElement('meta');
+            metaDesc.setAttribute('name', 'description');
+            document.head.appendChild(metaDesc);
+          }
+          metaDesc.setAttribute('content', found.excerpt);
+          // --- SEO End ---
 
           // Find related posts
           setRelatedPosts(posts.filter(p => p.category === found.category && p.id !== found.id).slice(0, 3));
+
+          return () => {
+            // Cleanup on unmount to restore original site metadata
+            document.title = originalTitle;
+            if (originalDescription) {
+              document.querySelector('meta[name="description"]')?.setAttribute('content', originalDescription);
+            }
+          };
         }
       } catch (err) {
         console.error("Failed to load post", err);
@@ -41,7 +60,7 @@ const BlogPost: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0d1117]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -51,10 +70,14 @@ const BlogPost: React.FC = () => {
     return <Navigate to="/blog" />;
   }
 
-  // High SEO: JSON-LD Structured Data for Search Engines
+  // JSON-LD Structured Data for Search Engines (BlogPosting Schema)
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": window.location.href
+    },
     "headline": post.title,
     "description": post.excerpt,
     "image": post.coverImage,
@@ -67,17 +90,17 @@ const BlogPost: React.FC = () => {
       "name": "ZabahSoft",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://zabahsoft.com/logo.png"
+        "url": "https://zabahsoft.com/logo.png" // Replace with real logo URL in production
       }
     },
     "datePublished": post.publishedAt,
-    "articleBody": post.content.replace(/<[^>]*>?/gm, '')
+    "articleBody": post.content.replace(/<[^>]*>?/gm, '') // Strip HTML for the body field
   };
 
   return (
     <div className="bg-white dark:bg-[#0d1117] text-gray-900 dark:text-white min-h-screen font-sans transition-colors duration-300">
       
-      {/* SEO Injection */}
+      {/* SEO Structured Data Injection */}
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>
@@ -126,7 +149,7 @@ const BlogPost: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex flex-col md:flex-row gap-12">
          
-         {/* Main Content (Semantic HTML) */}
+         {/* Main Content */}
          <article className="md:w-2/3 lg:w-3/4 mx-auto">
             <div className="prose prose-lg prose-gray dark:prose-invert max-w-none">
                <p className="text-xl md:text-2xl leading-relaxed text-gray-600 dark:text-gray-300 mb-12 border-l-4 border-blue-500 pl-6 py-2 font-serif italic">

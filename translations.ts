@@ -38,6 +38,19 @@ const baseEn = {
   whatsappRequired: "WhatsApp is required for deployment support",
   connectOnWhatsapp: "Connect on WhatsApp",
 
+  // Voice Mail Feature
+  quickActionTitle: "Direct Connection",
+  quickActionSub: "Speak to us instantly or join our WhatsApp community.",
+  sendVoiceMail: "Send Voice Mail",
+  startRecording: "Start Recording",
+  stopRecording: "Stop & Review",
+  sendVoiceBtn: "Send Recording",
+  voiceSentSuccess: "Voice mail received! We'll reply soon.",
+  recordingStatus: "Recording...",
+  microRequired: "Microphone access is required.",
+  getWhatsappBtn: "WhatsApp Support",
+  promptWhatsapp: "Please provide your WhatsApp number so we can get back to you:",
+
   // Dashboard & UX
   navWeb: "Web Solutions",
   navHosting: "Hosting",
@@ -89,8 +102,10 @@ const baseEn = {
   placeholderProject: "Project overview...",
 
   // Home Modules
-  moduleSolutionsTitle: "Enterprise Core Ecosystem",
-  moduleSolutionsSub: "Modular infrastructure designed to scale with your organization.",
+  moduleSolutionsTitle: "Service Categories",
+  moduleSolutionsSub: "Our high-level engineering pillars designed for Afghan enterprises.",
+  moduleMarketplaceTitle: "Zabah Marketplace",
+  moduleMarketplaceSub: "Deploy ready-to-use software, hosting, and official services instantly.",
   modulePortfolioTitle: "Engineering Excellence",
   modulePortfolioSub: "Explore some of our recent deployments across various sectors.",
   moduleBlogTitle: "Engineering Insights",
@@ -98,6 +113,7 @@ const baseEn = {
   viewProject: "View Project",
   readArticle: "Read Article",
   learnMore: "Learn More",
+  viewAllServices: "Browse Marketplace",
 
   // Footer New
   footerMission: "Afghanistan's leading digital infrastructure provider, specializing in secure hosting, official email systems, and enterprise software.",
@@ -156,6 +172,7 @@ const baseEn = {
   adminPermissions: "Permissions",
   adminOpsLog: "Operations Log",
   adminSettings: "Site Settings",
+  adminVoiceMails: "Voice Mails",
 
   // Settings
   lblDefaultLang: "Default Language",
@@ -356,104 +373,21 @@ const baseEn = {
   adminLabelAddress: "Physical Address",
   adminLabelPhone: "Phone",
   adminLabelEmail: "Email",
-  adminLabelMapQuery: "Map Search Term"
+  adminLabelMapQuery: "Map Search Term",
+
+  // Core data lists used throughout the app. 
+  // Defined here to ensure all translations have the correct schema.
+  servicesList: [] as Service[],
+  partnersList: [] as { name: string; icon: string }[],
+  blogPosts: [] as BlogPost[],
+  branches: [] as Branch[],
+  webDemos: [] as WebDemo[], 
+  testimonialsList: [] as Testimonial[]
 };
-
-const servicesEn: Service[] = [
-  {
-    id: 1,
-    name: "Corporate Website Package",
-    description: "A professional, responsive website designed to establish a strong digital presence for your business.",
-    type: ServiceType.WEB,
-    price_afn: 25000,
-    price_usd: 350,
-    features: ["Responsive Design", "CMS Integration", "SEO Optimization", "1 Year Hosting", "Official Corporate Emails"],
-    icon: "fas fa-laptop-code",
-    specs: [
-      { label: "Stack", value: "React / Laravel" },
-      { label: "Delivery", value: "2 Weeks" },
-      { label: "Emails", value: "Unlimited Accounts" },
-      { label: "Storage", value: "10 GB SSD" }
-    ]
-  },
-  {
-    id: 6,
-    name: ".AF Domain Registration",
-    description: "Secure your unique Afghan identity with a professional .af or .com.af domain name.",
-    type: ServiceType.DOMAIN,
-    price_afn: 2500,
-    price_usd: 35,
-    features: ["Instant DNS Propagation", "Whois Privacy", "Domain Lock", "24/7 Support"],
-    icon: "fas fa-globe",
-    badge: "Official",
-    specs: [
-      { label: "Extension", value: ".af / .com.af" },
-      { label: "Term", value: "1 Year" },
-      { label: "Transfer", value: "Free" },
-      { label: "Management", value: "Dashboard Included" }
-    ]
-  }
-];
-
-const partnersEn = [
-  { name: "Afghanistan Bank", icon: "fas fa-landmark" },
-  { name: "MTN Afghanistan", icon: "fas fa-signal" },
-  { name: "Kabul University", icon: "fas fa-graduation-cap" },
-  { name: "Azizi Bank", icon: "fas fa-money-check-alt" },
-  { name: "Kam Air", icon: "fas fa-plane" },
-  { name: "Ministry of Finance", icon: "fas fa-building" },
-];
-
-const branchesEn: Branch[] = [
-  { id: 'kabul', nameKey: 'hq', city: 'Kabul, Afghanistan', address: 'Shahr-e-Naw, Ansari Square, Business Tower, 4th Floor', phone: '+93 799 000 000', email: 'kabul@zabahsoft.com', mapQuery: 'Shahr-e-Naw,Kabul,Afghanistan' },
-];
-
-const testimonialsEn: Testimonial[] = [
-  { id: 1, name: "Jamshid Alokozay", role: "CEO", company: "Alokozay Group", content: "ZabahSoft transformed our digital infrastructure.", avatar: "https://ui-avatars.com/api/?name=Jamshid+Alokozay", rating: 5 },
-  { id: 2, name: "Sima Noori", role: "Operations Manager", company: "Red Crescent", content: "Their database clusters are incredibly secure and reliable.", avatar: "https://ui-avatars.com/api/?name=Sima+Noori", rating: 5 },
-  { id: 3, name: "Ahmad Shah", role: "Founder", company: "Kabul Tech Hub", content: "Best software development team in the region. Highly recommended.", avatar: "https://ui-avatars.com/api/?name=Ahmad+Shah", rating: 5 }
-];
-
-const postsEn: BlogPost[] = [
-  {
-    id: "1",
-    slug: "fintech-afghanistan",
-    title: "Fintech Growth in Afghanistan",
-    excerpt: "Exploring digital payments.",
-    content: "<p>Digital transactions are evolving.</p>",
-    coverImage: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d",
-    author: { name: "Ahmad Fawad", avatar: "https://ui-avatars.com/api/?name=Ahmad+Fawad", role: "Engineer" },
-    category: "Tech",
-    tags: ["Fintech"],
-    publishedAt: "Oct 24, 2023",
-    readTime: "5 min",
-    featured: true
-  }
-];
-
-const webDemosEn: WebDemo[] = [
-  {
-    id: 1,
-    title: "E-Government Portal",
-    category: "Enterprise",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
-    previewUrl: "https://example.com/demo1",
-    tags: ["Security", "Database", "Citizen Services"],
-    description: "A secure digital portal for managing public requests and identity verification.",
-    client: "National Agency",
-    year: "2023"
-  }
-];
 
 export const translations = {
   en: {
     ...baseEn,
-    servicesList: servicesEn,
-    partnersList: partnersEn,
-    blogPosts: postsEn,
-    branches: branchesEn,
-    webDemos: webDemosEn, 
-    testimonialsList: testimonialsEn
   },
   fa: {
     ...baseEn,
@@ -473,6 +407,19 @@ export const translations = {
     chatWithEngineer: "گفتگو با مهندس",
     whatsappRequired: "شماره واتس‌اپ برای پشتیبانی استقرار الزامی است",
     connectOnWhatsapp: "ارتباط از طریق واتس‌اپ",
+
+    // Voice FA
+    quickActionTitle: "ارتباط مستقیم",
+    quickActionSub: "فوراً با ما صحبت کنید یا به جامعه واتس‌اپ ما بپیوندید.",
+    sendVoiceMail: "ارسال پیام صوتی",
+    startRecording: "شروع ضبط",
+    stopRecording: "توقف و بازبینی",
+    sendVoiceBtn: "ارسال فایل صوتی",
+    voiceSentSuccess: "پیام صوتی دریافت شد! به زودی پاسخ خواهیم داد.",
+    recordingStatus: "در حال ضبط...",
+    microRequired: "دسترسی به میکروفون الزامی است.",
+    getWhatsappBtn: "پشتیبانی واتس‌اپ",
+    promptWhatsapp: "لطفاً شماره واتس‌اپ خود را وارد کنید تا با شما تماس بگیریم:",
 
     // Dashboard & UX
     contribute: "مشارکت",
@@ -512,6 +459,7 @@ export const translations = {
     adminActions: "عملیات",
     adminPermissions: "دسترسی‌ها",
     adminSettings: "تنظیمات سیستم",
+    adminVoiceMails: "پیام‌های صوتی",
 
     // Settings FA
     lblDefaultLang: "زبان پیش‌فرض",
@@ -552,8 +500,10 @@ export const translations = {
     homeRequestSuccessSub: "تیم فنی ما نیازهای شما را بررسی کرده و به زودی از طریق ایمیل با شما تماس خواهد گرفت.",
 
     // Home Modules FA
-    moduleSolutionsTitle: "اکوسیستم هسته‌ای سازمانی",
-    moduleSolutionsSub: "زیرساخت‌های ماژولار طراحی شده برای مقیاس‌پذیری با سازمان شما.",
+    moduleSolutionsTitle: "دسته‌بندی خدمات",
+    moduleSolutionsSub: "ستون‌های مهندسی سطح بالای ما که برای سازمان‌های افغان طراحی شده‌اند.",
+    moduleMarketplaceTitle: "فروشگاه ظبه",
+    moduleMarketplaceSub: "نرم‌افزارها، میزبانی و خدمات رسمی آماده استفاده را فوراً مستقر کنید.",
     modulePortfolioTitle: "تعالی مهندسی",
     modulePortfolioSub: "برخی از استقرارهای اخیر ما در بخش‌های مختلف را بررسی کنید.",
     moduleBlogTitle: "دیدگاه‌های مهندسی",
@@ -561,6 +511,7 @@ export const translations = {
     viewProject: "مشاهده پروژه",
     readArticle: "خواند مقاله",
     learnMore: "بیشتر بدانید",
+    viewAllServices: "مشاهده فروشگاه",
 
     // Footer FA
     footerMission: "پیشرو در ارائه زیرساخت‌های دیجیتال در افغانستان، متخصص در میزبانی امن، سیستم‌های ایمیل رسمی و نرم‌افزارهای سازمانی.",
@@ -596,25 +547,7 @@ export const translations = {
     adminLabelIcon: "آیکون",
     adminLabelBadge: "نشان ویژه",
     adminLabelFeatures: "ویژگی‌ها (هر خط یک مورد)",
-    adminLabelSpecs: "مشخصات",
-
-    servicesList: servicesEn.map(s => ({ ...s, name: s.name === "Corporate Website Package" ? "بسته وب‌سایت شرکتی" : s.name })),
-    partnersList: [
-        { name: "بانک مرکزی افغانستان", icon: "fas fa-landmark" },
-        { name: "ام‌تی‌ان افغانستان", icon: "fas fa-signal" },
-        { name: "دانشگاه کابل", icon: "fas fa-graduation-cap" },
-        { name: "عزیزی بانک", icon: "fas fa-money-check-alt" },
-        { name: "کام ایر", icon: "fas fa-plane" },
-        { name: "وزارت مالیه", icon: "fas fa-building" },
-    ],
-    blogPosts: postsEn,
-    branches: branchesEn.map(b => ({ ...b, city: b.id === 'kabul' ? "کابل، افغانستان" : "هرات، افغانستان" })),
-    webDemos: webDemosEn,
-    testimonialsList: [
-        { id: 1, name: "جمشید الکوزی", role: "مدیر عامل", company: "گروه الکوزی", content: "ظبه‌سافت زیرساخت دیجیتال ما را متحول کرد.", avatar: "https://ui-avatars.com/api/?name=Jamshid+Alokozay", rating: 5 },
-        { id: 2, name: "سیما نوری", role: "مدیر عملیات", company: "هلال احمر", content: "خوشه‌های دیتابیس آن‌ها فوق‌العاده امن و قابل اعتماد هستند.", avatar: "https://ui-avatars.com/api/?name=Sima+Noori", rating: 5 },
-        { id: 3, name: "احمد شاه", role: "بنیانگذار", company: "کابل تک هاب", content: "بهترین تیم توسعه نرم‌افزار در منطقه. به شدت توصیه می‌شود.", avatar: "https://ui-avatars.com/api/?name=Ahmad+Shah", rating: 5 }
-    ]
+    adminLabelSpecs: "مشخصات"
   },
   ps: {
     ...baseEn,
@@ -632,10 +565,23 @@ export const translations = {
     chatWithEngineer: "له انجنیر سره اړیکه",
     connectOnWhatsapp: "په واټس‌اپ اړیکه ونیسئ",
 
+    // Voice PS
+    quickActionTitle: "مستقمه اړیکه",
+    quickActionSub: "موږ سره سمدلاسه خبرې وکړئ یا زموږ د واټس‌اپ ټولنې سره یوځای شئ.",
+    sendVoiceMail: "غږیز پیغام واستوئ",
+    startRecording: "ریکارډ پیل کړئ",
+    stopRecording: "بندول او بیاکتنه",
+    sendVoiceBtn: "غږ واستوئ",
+    voiceSentSuccess: "غږیز پیغام ترلاسه شو! موږ به ژر ځواب درکړو.",
+    recordingStatus: "ریکارډ کیږي...",
+    microRequired: "مایکروفون ته لاسرسی اړین دی.",
+    getWhatsappBtn: "واټس‌اپ ملاتړ",
+    promptWhatsapp: "مهرباني وکړئ خپل د واټس‌اپ شمیره ولیکئ ترڅو موږ له تاسو سره اړیکه ونیسو:",
+
     // Dashboard & UX
     contribute: "ونډه اخیستل",
     contributeTitle: "زموږ سره په وده کې مرسته وکړئ",
-    contributeDesc: "خپل بریالیتوب کیسې شریک کړئ یا د ظبه‌سافت د ښه کولو لپاره نوې ځانګړتیاوې وړاندیز کړئ.",
+    contributeDesc: "خپل بریالیتوب کیسې شریک کړئ یا d ظبه‌سافت د ښه کولو لپاره نوې ځانګړتیاوې وړاندیز کړئ.",
     contributionType: "د ونډې ډول",
     contribSuccess: "د بریالیتوب کیسه",
     contribFeature: "د ځانګړتیا وړاندیز",
@@ -680,15 +626,18 @@ export const translations = {
     homeRequestSuccessSub: "زموږ تخنیکي ټیم به ستاسو اړتیاوې بیاکتنه وکړي او ډیر ژر به له تاسو سره اړیکه ونیسي.",
 
     // Home Modules PS
-    moduleSolutionsTitle: "سازماني هسته",
-    moduleSolutionsSub: "ستاسو د سازمان سره د پیمانه کولو لپاره ډیزاین شوي ماډلر زیربناوې.",
+    moduleSolutionsTitle: "د خدمتونو کټګورۍ",
+    moduleSolutionsSub: "زموږ د انجینرۍ لوړې کچې ستنې چې د افغان سازمانونو لپاره ډیزاین شوي.",
+    moduleMarketplaceTitle: "د ظبه بازار",
+    moduleMarketplaceSub: "تیار سافټویرونه، کوربه توب او رسمي خدمات سمدلاسه ځای په ځای کړئ.",
     modulePortfolioTitle: "انجینري غوره والی",
     modulePortfolioSub: "په بیلابیلو سکتورونو کې زموږ ځینې وروستي استقرارونه وپلټئ.",
     moduleBlogTitle: "انجینري لیدونه",
-    moduleBlogSub: "د ټیکنالوژۍ او ستراتیژیو په اړه ژور بحثونه چې ډیجیټل بدلون رامینځته کوي.",
+    moduleBlogSub: "د ټیکنالوژۍ او ستراتیژیو په اړه ژور بحثونه چې ډیجیټل بدلون رامینته کوي.",
     viewProject: "پروژه وګورئ",
     readArticle: "لیکنه ولولئ",
     learnMore: "نور پوه شئ",
+    viewAllServices: "بازار وګورئ",
 
     // Footer PS
     footerMission: "په افغانستان کې د ډیجیټل زیربنا مخکښ چمتو کونکی، د خوندي کوربه توب، رسمي بریښنالیک سیسټمونو او سازماني سافټویرونو کې تخصص لري.",
@@ -727,32 +676,7 @@ export const translations = {
     adminNewLeads: "نوي لیډونه",
     adminCompleted: "بشړ شوی",
     adminSettings: "د سیستم تنظیمات",
-
-    // Settings PS
-    lblDefaultLang: "اصلي ژبه",
-    lblDefaultTheme: "اصلي تم",
-    themeLight: "روښانه حالت",
-    themeDark: "تیاره حالت",
-    btnSaveSettings: "د سیستم تنظیمات خوندي کړئ",
-    userPreferences: "شخصي تنظیمات",
-
-    servicesList: servicesEn,
-    partnersList: [
-        { name: "د افغانستان بانک", icon: "fas fa-landmark" },
-        { name: "ایم‌ټي‌این افغانستان", icon: "fas fa-signal" },
-        { name: "کابل پوهنتون", icon: "fas fa-graduation-cap" },
-        { name: "عزیزي بانک", icon: "fas fa-money-check-alt" },
-        { name: "کام ایر", icon: "fas fa-plane" },
-        { name: "د مالیې وزارت", icon: "fas fa-building" },
-    ],
-    blogPosts: postsEn,
-    branches: branchesEn,
-    webDemos: webDemosEn,
-    testimonialsList: [
-        { id: 1, name: "جمشید الکوزی", role: "اجرایه مدیر", company: "الکوزی ګروپ", content: "ظبه‌سافت زموږ ډیجیټل زیربنا بدله کړه.", avatar: "https://ui-avatars.com/api/?name=Jamshid+Alokozay", rating: 5 },
-        { id: 2, name: "سیما نوري", role: "عملیاتي مدیر", company: "سرې میاشت", content: "د دوی ډیټابیس کلسټرونه په زړه پورې ډول خوندي او د باور وړ دي.", avatar: "https://ui-avatars.com/api/?name=Sima+Noori", rating: 5 },
-        { id: 3, name: "احمد شاه", role: "بنسټ ایښودونکی", company: "کابل ټیک هب", content: "په سیمه کې د سافټویر جوړولو غوره ټیم. په کلکه وړاندیز کیږي.", avatar: "https://ui-avatars.com/api/?name=Ahmad+Shah", rating: 5 }
-    ]
+    adminVoiceMails: "غږیز پیغامونه"
   }
 };
 

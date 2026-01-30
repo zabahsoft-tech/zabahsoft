@@ -1,5 +1,8 @@
 {
   "name": "ZabahSoft Portal",
   "description": "Corporate platform and client portal for ZabahSoft, featuring service catalogs, client dashboard, and AI-powered support.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ]
 }

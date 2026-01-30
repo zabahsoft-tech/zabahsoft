@@ -24,12 +24,40 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const base = getTranslation(lang);
     try {
       const overrides = await api.getSiteConfig();
-      // Merge overrides that match the current language
       const langOverrides = overrides[lang] || {};
       setDynamicT({ ...base, ...langOverrides });
     } catch (e) {
       setDynamicT(base);
     }
+  };
+
+  const detectLocationAndSetLanguage = (): Promise<Language> => {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        resolve('en');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Approximate bounding box for Afghanistan
+          const isInAfghanistan = 
+            latitude >= 29.0 && latitude <= 39.0 && 
+            longitude >= 60.0 && longitude <= 75.0;
+          
+          resolve(isInAfghanistan ? 'fa' : 'en');
+        },
+        () => {
+          // Fallback to browser language if location is denied
+          const browserLang = navigator.language.toLowerCase();
+          if (browserLang.includes('fa')) resolve('fa');
+          else if (browserLang.includes('ps')) resolve('ps');
+          else resolve('en');
+        },
+        { timeout: 5000 }
+      );
+    });
   };
 
   useEffect(() => {
@@ -39,16 +67,20 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setLanguage(savedLang);
         loadTranslations(savedLang);
       } else {
-        // Fetch system default
+        const detected = await detectLocationAndSetLanguage();
+        let finalLang = detected;
+        
         try {
           const settings = await api.getSystemSettings();
-          const defaultLang = settings.defaultLanguage || 'fa';
-          setLanguage(defaultLang);
-          loadTranslations(defaultLang);
+          // System settings override detection if explicitly set by admin, 
+          // but usually we want dynamic detection for first-time users.
+          finalLang = savedLang || detected || settings.defaultLanguage || 'fa';
         } catch (e) {
-          setLanguage('fa');
-          loadTranslations('fa');
+          finalLang = detected || 'fa';
         }
+        
+        setLanguage(finalLang);
+        loadTranslations(finalLang);
       }
     };
     initLanguage();

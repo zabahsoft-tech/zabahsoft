@@ -27,11 +27,17 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
       if (savedTheme) {
         setTheme(savedTheme);
       } else {
+        // Automatic theme based on time of day
+        const hour = new Date().getHours();
+        const isDayTime = hour >= 6 && hour < 18; // 6 AM to 6 PM
+        const autoTheme = isDayTime ? 'light' : 'dark';
+        
         try {
           const settings = await api.getSystemSettings();
-          setTheme(settings.defaultTheme || 'dark');
+          // Use system default if set, otherwise use time-based detection
+          setTheme(settings.defaultTheme || autoTheme);
         } catch (e) {
-          setTheme('dark');
+          setTheme(autoTheme);
         }
       }
     };
@@ -40,8 +46,13 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') root.classList.add('dark');
-    else root.classList.remove('dark');
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
+    } else {
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
+    }
     localStorage.setItem('zabah_theme', theme);
   }, [theme]);
 

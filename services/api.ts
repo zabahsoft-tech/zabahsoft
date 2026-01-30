@@ -16,8 +16,20 @@ const STORAGE_KEYS = {
   CONTRIBUTIONS: 'zabah_db_contributions',
   SITE_CONFIG: 'zabah_db_site_config',
   TESTIMONIALS: 'zabah_db_testimonials',
-  SYSTEM_SETTINGS: 'zabah_db_system_settings'
+  SYSTEM_SETTINGS: 'zabah_db_system_settings',
+  LEGAL_PRIVACY: 'zabah_db_legal_privacy',
+  LEGAL_TERMS: 'zabah_db_legal_terms',
+  VOICE_MAILS: 'zabah_db_voice_mails'
 };
+
+export interface VoiceMail {
+  id: string;
+  name: string;
+  whatsapp: string;
+  date: string;
+  audio: string;
+  status: 'new' | 'processed';
+}
 
 export interface ContactRequest {
   id: string;
@@ -106,6 +118,24 @@ const seedDatabase = () => {
     };
     localStorage.setItem(STORAGE_KEYS.SYSTEM_SETTINGS, JSON.stringify(defaultSettings));
   }
+
+  if (!localStorage.getItem(STORAGE_KEYS.LEGAL_PRIVACY)) {
+    const defaultPrivacy = {
+      en: "<h1>Privacy Policy</h1><p>At ZabahSoft, we value your privacy...</p>",
+      fa: "<h1>سیاست حریم خصوصی</h1><p>در ظبه‌سافت، ما به حریم خصوصی شما اهمیت می‌دهیم...</p>",
+      ps: "<h1>د محرمیت پالیسي</h1><p>په ظبه سافت کې، موږ ستاسو محرمیت ته ارزښت ورکوو...</p>"
+    };
+    localStorage.setItem(STORAGE_KEYS.LEGAL_PRIVACY, JSON.stringify(defaultPrivacy));
+  }
+
+  if (!localStorage.getItem(STORAGE_KEYS.LEGAL_TERMS)) {
+    const defaultTerms = {
+      en: "<h1>Terms of Service</h1><p>Welcome to ZabahSoft. By using our services...</p>",
+      fa: "<h1>شرایط خدمات</h1><p>به ظبه‌سافت خوش آمدید. با استفاده از خدمات ما...</p>",
+      ps: "<h1>د خدماتو شرایط</h1><p>ظبه سافت ته ښه راغلاست. زموږ د خدماتو په کارولو سره...</p>"
+    };
+    localStorage.setItem(STORAGE_KEYS.LEGAL_TERMS, JSON.stringify(defaultTerms));
+  }
 };
 
 seedDatabase();
@@ -175,7 +205,6 @@ export const api = {
   async getOrders(): Promise<Order[]> {
     await delay(200);
     const allOrders: Order[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.ORDERS) || '[]');
-    const userId = localStorage.getItem('zabah_current_user_id');
     const currentUser = await this.getMe();
     if (currentUser.role === UserRole.SUPER_ADMIN || currentUser.role === UserRole.ADMIN) {
       return allOrders;
@@ -305,6 +334,14 @@ export const api = {
     return JSON.parse(localStorage.getItem(STORAGE_KEYS.CONTRIBUTIONS) || '[]');
   },
 
+  async createContribution(data: Contribution): Promise<Contribution> {
+    await delay();
+    const list = await this.getContributions();
+    const updated = [data, ...list];
+    localStorage.setItem(STORAGE_KEYS.CONTRIBUTIONS, JSON.stringify(updated));
+    return data;
+  },
+
   async submitContribution(contribution: Omit<Contribution, 'id' | 'date' | 'status'>): Promise<Contribution> {
     await delay();
     const list = await this.getContributions();
@@ -316,6 +353,14 @@ export const api = {
     };
     localStorage.setItem(STORAGE_KEYS.CONTRIBUTIONS, JSON.stringify([newEntry, ...list]));
     return newEntry;
+  },
+
+  async updateContribution(updated: Contribution): Promise<Contribution> {
+    await delay();
+    const list = await this.getContributions();
+    const newList = list.map(c => c.id === updated.id ? updated : c);
+    localStorage.setItem(STORAGE_KEYS.CONTRIBUTIONS, JSON.stringify(newList));
+    return updated;
   },
 
   async updateContributionStatus(id: string, status: Contribution['status']): Promise<void> {
@@ -360,6 +405,13 @@ export const api = {
     return JSON.parse(localStorage.getItem(STORAGE_KEYS.REQUESTS) || '[]');
   },
 
+  async createContactRequest(data: ContactRequest): Promise<ContactRequest> {
+    await delay();
+    const list = await this.getContactRequests();
+    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify([data, ...list]));
+    return data;
+  },
+
   async submitContact(data: any): Promise<void> {
     await delay();
     const requests = JSON.parse(localStorage.getItem(STORAGE_KEYS.REQUESTS) || '[]');
@@ -372,10 +424,60 @@ export const api = {
     localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify([newRequest, ...requests]));
   },
 
+  async updateContactRequest(updated: ContactRequest): Promise<ContactRequest> {
+    await delay();
+    const list = await this.getContactRequests();
+    const newList = list.map(r => r.id === updated.id ? updated : r);
+    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(newList));
+    return updated;
+  },
+
   async updateContactStatus(id: string, status: ContactRequest['status']): Promise<void> {
     const reqs = await this.getContactRequests();
     const updated = reqs.map(r => r.id === id ? { ...r, status } : r);
     localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(updated));
+  },
+
+  async deleteContactRequest(id: string): Promise<void> {
+    await delay();
+    const list = await this.getContactRequests();
+    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(list.filter(r => r.id !== id)));
+  },
+
+  // --- Legal Content ---
+  async getLegalContent(type: 'privacy' | 'terms'): Promise<Record<Language, string>> {
+    const key = type === 'privacy' ? STORAGE_KEYS.LEGAL_PRIVACY : STORAGE_KEYS.LEGAL_TERMS;
+    return JSON.parse(localStorage.getItem(key) || '{}');
+  },
+
+  async updateLegalContent(type: 'privacy' | 'terms', content: Record<Language, string>): Promise<void> {
+    const key = type === 'privacy' ? STORAGE_KEYS.LEGAL_PRIVACY : STORAGE_KEYS.LEGAL_TERMS;
+    localStorage.setItem(key, JSON.stringify(content));
+    await delay();
+  },
+
+  // --- Voice Mails ---
+  async getVoiceMails(): Promise<VoiceMail[]> {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.VOICE_MAILS) || '[]');
+  },
+
+  async submitVoiceMail(base64Data: string, name: string, whatsapp: string): Promise<void> {
+     await delay(1000);
+     const list = JSON.parse(localStorage.getItem(STORAGE_KEYS.VOICE_MAILS) || '[]');
+     const newVoice: VoiceMail = {
+        id: `VM-${Date.now()}`,
+        name,
+        whatsapp,
+        date: new Date().toLocaleString(),
+        audio: base64Data,
+        status: 'new'
+     };
+     localStorage.setItem(STORAGE_KEYS.VOICE_MAILS, JSON.stringify([newVoice, ...list]));
+  },
+
+  async deleteVoiceMail(id: string): Promise<void> {
+    const list = await this.getVoiceMails();
+    localStorage.setItem(STORAGE_KEYS.VOICE_MAILS, JSON.stringify(list.filter(v => v.id !== id)));
   },
 
   // --- System Settings ---
