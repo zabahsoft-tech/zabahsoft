@@ -47,7 +47,6 @@ const OfficialServices: React.FC = () => {
     setIsChecking(true);
     setAvailability('none');
     
-    // Simulate API call
     setTimeout(() => {
       const takenDomains = ['zabahsoft', 'google', 'facebook', 'example', 'mof', 'gov', 'afghanistan'];
       const isTaken = takenDomains.some(d => domain.toLowerCase().includes(d));
@@ -97,21 +96,21 @@ const OfficialServices: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-100 dark:bg-blue-500/10 rounded-full blur-[150px] pointer-events-none opacity-60 dark:opacity-100 animate-blob"></div>
         
         <div className="max-w-6xl mx-auto relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-bold uppercase tracking-widest mb-8 shadow-sm animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-bold uppercase tracking-widest mb-8 shadow-sm animate-fade-in-up">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
             Professional Identity
           </div>
           
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-8 text-gray-900 dark:text-white drop-shadow-xl animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
+          <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-8 text-gray-900 dark:text-white drop-shadow-xl animate-fade-in-up">
             Secure Your <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 dark:from-green-400 dark:to-blue-400">Digital Trust</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed font-light animate-fade-in-up opacity-0" style={{animationDelay: '0.5s'}}>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed font-light animate-fade-in-up">
             {t.officialHeroSubtitle}
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up opacity-0" style={{animationDelay: '0.7s'}}>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up">
             <button 
               onClick={() => document.getElementById('domain-check')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-green-600 hover:bg-green-500 text-white px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 shadow-[0_0_25px_rgba(22,163,74,0.4)]"
@@ -131,18 +130,18 @@ const OfficialServices: React.FC = () => {
       {/* Domain Checker & Ordering System */}
       <section id="domain-check" className="py-24 px-4 w-full bg-white dark:bg-[#0d1117] border-y border-gray-200 dark:border-gray-800">
          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-10 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+            <div className="text-center mb-10">
                 <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{t.domainCheckTitle}</h2>
                 <p className="text-gray-500 dark:text-gray-400">{t.domainCheckDesc}</p>
             </div>
 
-            <div className="bg-gray-50 dark:bg-[#161b22] p-3 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-4 animate-fade-in-up opacity-0" style={{animationDelay: '0.4s'}}>
+            <div className="bg-gray-50 dark:bg-[#161b22] p-3 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-4">
                 <div className="flex-grow w-full relative flex items-center">
                     <input 
                         type="text" 
                         value={domain}
                         onChange={(e) => setDomain(e.target.value)}
-                        placeholder="yourcompany"
+                        placeholder={t.placeholderDomain}
                         className="w-full bg-transparent text-xl px-6 py-5 outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
                     />
                     <div className="shrink-0 pr-4">
@@ -201,6 +200,7 @@ const OfficialServices: React.FC = () => {
                                 />
                                 <input 
                                     required 
+                                    dir="ltr"
                                     type="email" 
                                     placeholder={t.lblEmail} 
                                     value={formState.email} 
@@ -235,14 +235,14 @@ const OfficialServices: React.FC = () => {
       {/* Official Email Plans */}
       <section id="plans" className="py-24 px-4 bg-gray-50 dark:bg-[#161b22]">
          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+            <div className="text-center mb-16">
                 <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.emailPlansTitle}</h2>
                 <p className="text-gray-500 dark:text-gray-400">Combine your domain with enterprise-grade official email hosting.</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                {plans.map((plan, i) => (
-                  <div key={i} className={`relative bg-white dark:bg-[#0d1117] border rounded-3xl p-10 flex flex-col hover:-translate-y-2 transition-transform duration-300 shadow-xl animate-fade-in-up opacity-0 ${plan.popular ? 'border-green-500 ring-4 ring-green-500/10' : 'border-gray-200 dark:border-gray-800'}`} style={{animationDelay: `${0.3 + i * 0.15}s`}}>
+                  <div key={i} className={`relative bg-white dark:bg-[#0d1117] border rounded-3xl p-10 flex flex-col hover:-translate-y-2 transition-transform duration-300 shadow-xl ${plan.popular ? 'border-green-500 ring-4 ring-green-500/10' : 'border-gray-200 dark:border-gray-800'}`}>
                      {plan.popular && (
                         <div className="absolute top-0 right-0 left-0 bg-green-600 text-white text-xs font-bold py-1.5 text-center uppercase tracking-widest rounded-t-[22px]">
                            {t.mostPopular}
@@ -264,10 +264,6 @@ const OfficialServices: React.FC = () => {
                             <li className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
                                 <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400"><i className="fas fa-shield-alt"></i></div> 
                                 {t.featSpam}
-                            </li>
-                            <li className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400"><i className="fas fa-globe"></i></div> 
-                                {t.featWebmail}
                             </li>
                         </ul>
                         

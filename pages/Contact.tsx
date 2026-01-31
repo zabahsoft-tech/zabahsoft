@@ -83,7 +83,7 @@ const Contact: React.FC = () => {
                <div className="p-6 bg-gray-50 dark:bg-[#0d1117] border-b border-gray-200 dark:border-gray-800"><h3 className="font-bold">Select Location</h3></div>
                <div>
                   {isLoading ? (
-                    <div className="p-8 text-center text-gray-400">Loading locations...</div>
+                    <div className="p-8 text-center text-gray-400">{t.loading}</div>
                   ) : branches.length === 0 ? (
                     <div className="p-8 text-center text-gray-400">No branches found.</div>
                   ) : (
@@ -117,20 +117,20 @@ const Contact: React.FC = () => {
                {submitted ? (
                   <div className="text-center py-12 animate-fade-in-up">
                      <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6"><i className="fas fa-paper-plane"></i></div>
-                     <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
-                     <p className="text-gray-500">We'll get back to you at <b>{formState.email}</b> shortly.</p>
-                     <button onClick={() => setSubmitted(false)} className="mt-8 text-blue-600 hover:underline">Send another message</button>
+                     <h3 className="text-2xl font-bold mb-2">{t.msgSentSuccess}</h3>
+                     <p className="text-gray-500">{t.msgSentSub}</p>
+                     <button onClick={() => setSubmitted(false)} className="mt-8 text-blue-600 hover:underline">{t.submitAnother}</button>
                   </div>
                ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">{t.lblFullName}</label>
-                           <input required type="text" name="name" value={formState.name} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500" />
+                           <input required type="text" name="name" value={formState.name} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500" placeholder={t.placeholderName} />
                         </div>
                         <div>
                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">{t.lblEmail}</label>
-                           <input required type="email" name="email" value={formState.email} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500" />
+                           <input required dir="ltr" type="email" name="email" value={formState.email} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500" placeholder={t.placeholderEmail} />
                         </div>
                      </div>
                      <div>
@@ -139,9 +139,9 @@ const Contact: React.FC = () => {
                      </div>
                      <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-2">{t.lblMessage}</label>
-                        <textarea required name="message" rows={5} value={formState.message} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea required name="message" rows={5} value={formState.message} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#0d1117] border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500" placeholder={t.placeholderProject}></textarea>
                      </div>
-                     <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2">{isSubmitting ? 'Sending...' : t.btnSendMessage} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i></button>
+                     <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2">{isSubmitting ? t.loading : t.btnSendMessage} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i></button>
                   </form>
                )}
             </div>

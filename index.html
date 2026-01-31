@@ -44,11 +44,13 @@
             boxShadow: {
               'glow-blue': '0 0 20px rgba(56, 139, 253, 0.15)',
               'glow-green': '0 0 20px rgba(45, 164, 78, 0.15)',
+              'brand': '0 20px 50px -12px rgba(9, 105, 218, 0.25)',
             },
             animation: {
               'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               'scale-in': 'scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 12s linear infinite',
             },
             keyframes: {
               fadeInUp: {
@@ -68,7 +70,15 @@
       body {
         font-feature-settings: "ss01", "ss02", "cv01", "cv02";
         -webkit-font-smoothing: antialiased;
+        /* Hide native cursor for custom one on desktop */
+        cursor: none;
       }
+      
+      /* Re-enable cursor for interactive elements if custom cursor fails or for clarity */
+      a, button, [role="button"], input, select, textarea {
+        cursor: none;
+      }
+
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       [dir="rtl"] { font-family: 'Noto Naskh Arabic', sans-serif; }
       
@@ -82,8 +92,10 @@
         border-color: rgba(56, 139, 253, 0.4);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       }
-      .active-nav-bg {
-        background: linear-gradient(90deg, rgba(56, 139, 253, 0.15) 0%, transparent 100%);
+      
+      /* Mobile touch optimization - keep native cursor logic */
+      @media (hover: none) and (pointer: coarse) {
+        body, a, button { cursor: auto !important; }
       }
     </style>
   <script type="importmap">

@@ -9,11 +9,13 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Home from './pages/Home';
 import ServicesPage from './pages/Services';
 import WebSolutions from './pages/WebSolutions';
+import DomainRegistration from './pages/DomainRegistration';
 import OfficialServices from './pages/OfficialServices';
 import HostingSolutions from './pages/HostingSolutions';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
+import HelpCenter from './pages/HelpCenter';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -48,12 +50,14 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<ServicesPage user={user} />} />
+        <Route path="/domains" element={<DomainRegistration />} />
         <Route path="/solutions/web" element={<WebSolutions />} />
         <Route path="/solutions/official" element={<OfficialServices />} />
         <Route path="/solutions/hosting" element={<HostingSolutions />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/help" element={<HelpCenter />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route 

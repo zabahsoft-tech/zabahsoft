@@ -1,11 +1,10 @@
-import { GoogleGenAI } from "@google/genai";
+
+import { GoogleGenAI, Modality } from "@google/genai";
 import { MOCK_SERVICES } from "../constants";
 
 let aiClient: GoogleGenAI | null = null;
 
-// Initialize the client safely
 try {
-  // Always initialize using new GoogleGenAI({ apiKey: process.env.API_KEY })
   if (process.env.API_KEY) {
     aiClient = new GoogleGenAI({ apiKey: process.env.API_KEY });
   } else {
@@ -42,7 +41,6 @@ export const sendMessageToGemini = async (message: string, history: {role: strin
   }
 
   try {
-    // Using gemini-3-flash-preview for basic text and reasoning tasks
     const model = "gemini-3-flash-preview";
     const chat = aiClient.chats.create({
       model: model,
@@ -53,15 +51,41 @@ export const sendMessageToGemini = async (message: string, history: {role: strin
     });
 
     const response = await chat.sendMessage({ message });
-    
-    // Access the .text property directly (not a method call) as per GenerateContentResponse definition
     if (response.text) {
         return response.text;
     }
-    
     return "I apologize, I couldn't generate a response at this moment.";
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "I'm having trouble connecting to the server. Please try again later.";
+  }
+};
+
+/**
+ * Transforms text into human-like audio using Gemini TTS.
+ */
+export const generateTTS = async (text: string): Promise<string | undefined> => {
+  if (!aiClient) return undefined;
+  
+  try {
+    const response = await aiClient.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ parts: [{ text }] }],
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName: 'Zephyr' },
+          },
+        },
+      },
+    });
+    
+    // Extract base64 encoded PCM data
+    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    return base64Audio;
+  } catch (err) {
+    console.error("TTS Generation Error:", err);
+    return undefined;
   }
 };
