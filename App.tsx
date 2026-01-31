@@ -1,9 +1,12 @@
 
 import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Layout from './components/Layout';
+import PublicLayout from './components/PublicLayout';
+import PortalLayout from './components/PortalLayout';
+import CustomCursor from './components/CustomCursor';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { behaviorTracker } from './services/behaviorTracker';
 
 // Pages
 import Home from './pages/Home';
@@ -23,10 +26,12 @@ import Admin from './pages/Admin';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 
-const ScrollToTop = () => {
+const BehaviorManager = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Use cookies for better suggestions by tracking page interest
+    behaviorTracker.trackPageVisit(pathname);
   }, [pathname]);
   return null;
 };
@@ -46,39 +51,48 @@ const AppContent = () => {
   }
 
   return (
-    <Layout user={user} onLogout={logout}>
+    <>
+      <CustomCursor />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<ServicesPage user={user} />} />
-        <Route path="/domains" element={<DomainRegistration />} />
-        <Route path="/solutions/web" element={<WebSolutions />} />
-        <Route path="/solutions/official" element={<OfficialServices />} />
-        <Route path="/solutions/hosting" element={<HostingSolutions />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<BlogPost />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/help" element={<HelpCenter />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/dashboard" /> : <Login onLogin={login} />} 
-        />
-        <Route 
-          path="/register" 
-          element={user ? <Navigate to="/dashboard" /> : <Register onRegister={login} />} 
-        />
-        <Route 
-          path="/dashboard" 
-          element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} 
-        />
-        <Route 
-          path="/admin/*" 
-          element={user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' ? <Admin /> : <Navigate to="/" />} 
-        />
+        {/* Public Routes with Corporate Branding Header/Footer */}
+        <Route element={<PublicLayout user={user} onLogout={logout} />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<ServicesPage user={user} />} />
+          <Route path="/domains" element={<DomainRegistration />} />
+          <Route path="/solutions/web" element={<WebSolutions />} />
+          <Route path="/solutions/official" element={<OfficialServices />} />
+          <Route path="/solutions/hosting" element={<HostingSolutions />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route 
+            path="/login" 
+            element={user ? <Navigate to="/dashboard" /> : <Login onLogin={login} />} 
+          />
+          <Route 
+            path="/register" 
+            element={user ? <Navigate to="/dashboard" /> : <Register onRegister={login} />} 
+          />
+        </Route>
+
+        {/* Management Routes with Professional Sidebar/Workspace Layout */}
+        <Route element={user ? <PortalLayout user={user} onLogout={logout} /> : <Navigate to="/login" />}>
+          <Route 
+            path="/dashboard" 
+            element={<Dashboard user={user!} />} 
+          />
+          <Route 
+            path="/admin/*" 
+            element={user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' ? <Admin /> : <Navigate to="/" />} 
+          />
+        </Route>
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Layout>
+    </>
   );
 };
 
@@ -87,7 +101,7 @@ const App: React.FC = () => {
     <LanguageProvider>
       <AuthProvider>
         <HashRouter>
-          <ScrollToTop />
+          <BehaviorManager />
           <AppContent />
         </HashRouter>
       </AuthProvider>

@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { WebDemo } from '../types';
 
 const WebSolutions: React.FC = () => {
-  const { t, dir } = useLanguage();
+  const { t, dir, siteSettings } = useLanguage();
   const [formState, setFormState] = useState({
     name: '',
     company: '',
@@ -100,175 +100,6 @@ const WebSolutions: React.FC = () => {
         </div>
       </section>
 
-      {/* Stats Strip */}
-      <div className="border-y border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-white/5 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-          <div>
-            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">50+</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statClients}</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">99.9%</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statUptime}</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">2 Wks</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statDelivery}</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">24/7</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-semibold">{t.statSupport}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Web Packages Section */}
-      <section className="py-24 px-4 bg-gray-50 dark:bg-[#161b22] border-b border-gray-200 dark:border-gray-800">
-         <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-               <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.webPackagesTitle}</h2>
-               <p className="text-lg text-gray-600 dark:text-gray-400">{t.webPackagesDesc}</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               {packages.map((pkg, i) => (
-                  <div key={i} className={`relative bg-white dark:bg-[#0d1117] rounded-3xl p-8 border hover:-translate-y-2 transition-all duration-300 shadow-xl flex flex-col ${pkg.popular ? 'border-blue-500 ring-4 ring-blue-500/10 scale-105 z-10' : 'border-gray-200 dark:border-gray-800'}`}>
-                     {pkg.popular && (
-                        <div className="absolute top-0 inset-x-0 bg-blue-600 text-white text-xs font-bold py-1.5 text-center uppercase tracking-widest rounded-t-[22px]">
-                           {t.mostPopular}
-                        </div>
-                     )}
-                     <div className={pkg.popular ? 'mt-4' : ''}>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{pkg.name}</h3>
-                        <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-8">{pkg.price}</p>
-                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-4 tracking-wider">{t.pkgIncluded}</p>
-                        <ul className="space-y-4 mb-8 flex-grow">
-                           {pkg.features.map((f, idx) => (
-                              <li key={idx} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
-                                 <i className="fas fa-check-circle text-green-500"></i> {f}
-                              </li>
-                           ))}
-                        </ul>
-                        <button 
-                           onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
-                           className={`w-full py-3 rounded-xl font-bold transition-colors ${pkg.popular ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20'}`}
-                        >
-                           {t.planBtn}
-                        </button>
-                     </div>
-                  </div>
-               ))}
-            </div>
-         </div>
-      </section>
-
-      {/* Demos Section */}
-      <section id="demos" className="py-32 px-4 w-full bg-white dark:bg-[#0d1117] relative">
-        <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">{t.webDemosTitle}</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">{t.webDemosDesc}</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {t.webDemos.map((demo, index) => (
-                <div key={demo.id} className="group relative bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden hover:border-gray-400 dark:hover:border-gray-600 transition-all duration-500 hover:-translate-y-2 shadow-xl dark:shadow-2xl cursor-pointer" onClick={() => setActiveDemo(demo)}>
-                <div className="h-64 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-black/10 dark:bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src={demo.image} alt={demo.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute top-4 right-4 z-20 bg-white/90 dark:bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white shadow-lg">
-                    {demo.category}
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 dark:bg-black/40 backdrop-blur-[2px]">
-                        <button className="bg-white text-black px-8 py-3 rounded-full font-bold shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                            {t.viewDemo}
-                        </button>
-                    </div>
-                </div>
-                <div className="p-8">
-                    <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{demo.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 line-clamp-2">{demo.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                    {demo.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-mono">
-                        {tag}
-                        </span>
-                    ))}
-                    </div>
-                </div>
-                </div>
-            ))}
-            </div>
-        </div>
-      </section>
-
-      {/* Branded Demo Viewer Modal */}
-      {activeDemo && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-0 md:p-6 lg:p-12 bg-gh-bg/95 backdrop-blur-xl animate-scale-in">
-           <div className="bg-white dark:bg-[#0d1117] w-full max-w-[1500px] h-full rounded-2xl overflow-hidden shadow-brand flex flex-col border border-gray-200 dark:border-white/10 relative">
-              
-              {/* Branded Browser Toolbar */}
-              <div className="bg-gradient-to-r from-blue-600/5 to-cyan-500/5 dark:from-blue-600/10 dark:to-cyan-500/10 px-5 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between shrink-0">
-                 <div className="flex items-center gap-6 flex-1">
-                    <div className="flex gap-2">
-                       <div className="w-3.5 h-3.5 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-500 transition-colors" onClick={() => setActiveDemo(null)}></div>
-                       <div className="w-3.5 h-3.5 rounded-full bg-yellow-500/80"></div>
-                       <div className="w-3.5 h-3.5 rounded-full bg-green-500/80"></div>
-                    </div>
-                    {/* Branded Address Bar */}
-                    <div className="hidden lg:flex flex-1 max-w-2xl bg-white dark:bg-gh-bg/50 rounded-xl px-5 py-2.5 text-[13px] text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-white/10 items-center gap-3 shadow-inner">
-                       <div className="w-5 h-5 rounded bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-[10px] text-white shrink-0">
-                          <i className="fas fa-cube"></i>
-                       </div>
-                       <span className="font-mono truncate select-all">{activeDemo.previewUrl}</span>
-                       <i className="fas fa-lock text-[10px] text-green-500 ml-auto"></i>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-4">
-                    <button onClick={() => setActiveDemo(null)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all">
-                       <i className="fas fa-times text-xl"></i>
-                    </button>
-                 </div>
-              </div>
-
-              {/* Live Preview Iframe */}
-              <div className="flex-1 bg-gray-100 dark:bg-black relative">
-                 <iframe 
-                    src={activeDemo.previewUrl} 
-                    className="w-full h-full border-none"
-                    title="Live Preview"
-                    sandbox="allow-scripts allow-same-origin"
-                 ></iframe>
-                 <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none">
-                    <span className="bg-black/60 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-                       Live Sandbox Environment
-                    </span>
-                 </div>
-              </div>
-
-              {/* Branded Footer Details */}
-              <div className="bg-white dark:bg-[#161b22] border-t border-gray-200 dark:border-white/5 p-6 lg:p-8 shrink-0">
-                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex-1">
-                        <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-2">{activeDemo.title}</h2>
-                        <div className="flex flex-wrap gap-6 text-[11px] font-black uppercase tracking-widest text-gray-500 dark:text-white/40">
-                           <span className="flex items-center gap-2"><i className="fas fa-user-tie text-blue-600"></i> {activeDemo.client || 'Private Entity'}</span>
-                           <span className="flex items-center gap-2"><i className="fas fa-calendar-check text-blue-600"></i> {activeDemo.year || '2023 Deployment'}</span>
-                           <span className="flex items-center gap-2"><i className="fas fa-tag text-blue-600"></i> {activeDemo.category}</span>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 w-full md:w-auto">
-                       <button onClick={() => { document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); setActiveDemo(null); }} className="flex-1 md:flex-none px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
-                          Deploy Similar Solution <i className="fas fa-arrow-right"></i>
-                       </button>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </div>
-      )}
-
       {/* Form Section */}
       <section id="contact-form" className="py-32 px-4 bg-gray-50 dark:bg-[#0d1117] border-t border-gray-200 dark:border-gray-800 relative">
         <div className="max-w-5xl mx-auto">
@@ -313,7 +144,7 @@ const WebSolutions: React.FC = () => {
                 
                 <div className="relative z-10 mt-12 pt-8 border-t border-white/10 text-sm text-blue-200">
                    Direct Contact: <br/>
-                   <strong className="text-white text-lg">sales@zabahsoft.com</strong>
+                   <strong className="text-white text-lg">{siteSettings?.salesEmail || 'sales@zabahsoft.com'}</strong>
                 </div>
               </div>
 

@@ -5,7 +5,7 @@ import { Branch } from '../types';
 import { api } from '../services/api';
 
 const Contact: React.FC = () => {
-  const { t, dir } = useLanguage();
+  const { t, dir, siteSettings } = useLanguage();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [activeBranch, setActiveBranch] = useState<Branch | null>(null);
   const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' });
@@ -58,15 +58,15 @@ const Contact: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-20">
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <a href="https://wa.me/93799000000" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-[#161b22] p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col items-center text-center hover:-translate-y-1 transition-transform group">
+            <a href={`https://wa.me/${siteSettings?.whatsapp || '93799000000'}`} target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-[#161b22] p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col items-center text-center hover:-translate-y-1 transition-transform group">
                <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 text-3xl mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors"><i className="fab fa-whatsapp"></i></div>
                <h3 className="text-xl font-bold mb-2">{t.whatsappUs}</h3>
-               <span className="text-green-600 font-bold">+93 799 000 000</span>
+               <span className="text-green-600 font-bold" dir="ltr">{siteSettings?.phone || '+93 799 000 000'}</span>
             </a>
-            <a href="mailto:info@zabahsoft.com" className="bg-white dark:bg-[#161b22] p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col items-center text-center hover:-translate-y-1 transition-transform group">
+            <a href={`mailto:${siteSettings?.supportEmail || 'info@zabahsoft.com'}`} className="bg-white dark:bg-[#161b22] p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col items-center text-center hover:-translate-y-1 transition-transform group">
                <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-3xl mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors"><i className="fas fa-envelope-open-text"></i></div>
                <h3 className="text-xl font-bold mb-2">{t.supportEmail}</h3>
-               <span className="text-blue-600 font-bold">info@zabahsoft.com</span>
+               <span className="text-blue-600 font-bold">{siteSettings?.supportEmail || 'info@zabahsoft.com'}</span>
             </a>
              <div className="bg-white dark:bg-[#161b22] p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col items-center text-center hover:-translate-y-1 transition-transform group">
                <div className="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500 text-3xl mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors"><i className="fas fa-headset"></i></div>
@@ -92,8 +92,8 @@ const Contact: React.FC = () => {
                           <div className="flex justify-between items-start mb-2"><h4 className={`font-bold ${activeBranch?.id === branch.id ? 'text-blue-600' : ''}`}>{branch.city}</h4></div>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{branch.address}</p>
                           <div className="text-[10px] font-mono text-gray-400 flex flex-col gap-1">
-                             <span><i className="fas fa-phone mr-2"></i>{branch.phone}</span>
-                             <span><i className="fas fa-envelope mr-2"></i>{branch.email}</span>
+                             <span dir="ltr"><i className="fas fa-phone mr-2"></i>{branch.phone}</span>
+                             <span dir="ltr"><i className="fas fa-envelope mr-2"></i>{branch.email}</span>
                           </div>
                       </button>
                     ))

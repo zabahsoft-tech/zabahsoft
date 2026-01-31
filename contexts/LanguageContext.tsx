@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language } from '../types';
 import { translations, getTranslation } from '../translations';
-import { api } from '../services/api';
+import { api, SystemSettings } from '../services/api';
 
 interface LanguageContextType {
   language: Language;
@@ -10,6 +10,7 @@ interface LanguageContextType {
   t: typeof translations['en'];
   dir: 'ltr' | 'rtl';
   refreshTranslations: () => Promise<void>;
+  siteSettings: SystemSettings | null;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -17,6 +18,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('fa');
   const [dynamicT, setDynamicT] = useState(getTranslation('fa'));
+  const [siteSettings, setSiteSettings] = useState<SystemSettings | null>(null);
 
   const dir: 'ltr' | 'rtl' = language === 'en' ? 'ltr' : 'rtl';
 
@@ -41,7 +43,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // Approximate bounding box for Afghanistan
           const isInAfghanistan = 
             latitude >= 29.0 && latitude <= 39.0 && 
             longitude >= 60.0 && longitude <= 75.0;
@@ -49,7 +50,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           resolve(isInAfghanistan ? 'fa' : 'en');
         },
         () => {
-          // Fallback to browser language if location is denied
           const browserLang = navigator.language.toLowerCase();
           if (browserLang.includes('fa')) resolve('fa');
           else if (browserLang.includes('ps')) resolve('ps');
@@ -63,22 +63,20 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const initLanguage = async () => {
       const savedLang = localStorage.getItem('zabah_lang') as Language;
+      let settings: SystemSettings | null = null;
+      try {
+        settings = await api.getSystemSettings();
+        setSiteSettings(settings);
+      } catch (e) {
+        console.error("Failed to load settings", e);
+      }
+
       if (savedLang && ['en', 'fa', 'ps'].includes(savedLang)) {
         setLanguage(savedLang);
         loadTranslations(savedLang);
       } else {
         const detected = await detectLocationAndSetLanguage();
-        let finalLang = detected;
-        
-        try {
-          const settings = await api.getSystemSettings();
-          // System settings override detection if explicitly set by admin, 
-          // but usually we want dynamic detection for first-time users.
-          finalLang = savedLang || detected || settings.defaultLanguage || 'fa';
-        } catch (e) {
-          finalLang = detected || 'fa';
-        }
-        
+        const finalLang = savedLang || detected || settings?.defaultLanguage || 'fa';
         setLanguage(finalLang);
         loadTranslations(finalLang);
       }
@@ -94,6 +92,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const refreshTranslations = async () => {
     await loadTranslations(language);
+    try {
+      const settings = await api.getSystemSettings();
+      setSiteSettings(settings);
+    } catch (e) {}
   };
 
   const value = {
@@ -101,7 +103,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLanguage: handleSetLanguage,
     t: dynamicT,
     dir,
-    refreshTranslations
+    refreshTranslations,
+    siteSettings
   };
 
   return (

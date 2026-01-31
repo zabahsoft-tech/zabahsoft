@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { sendMessageToGemini, generateTTS } from '../services/geminiService';
 import { Link } from 'react-router-dom';
+import { api } from '../services/api';
+import { FAQ } from '../types';
 
 const HelpCenter: React.FC = () => {
   const { t, dir, language } = useLanguage();
@@ -11,6 +13,9 @@ const HelpCenter: React.FC = () => {
   const [isThinking, setIsThinking] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
+  const [isLoadingFaqs, setIsLoadingFaqs] = useState(true);
   const responseRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const recognitionRef = useRef<any>(null);
@@ -74,6 +79,19 @@ const HelpCenter: React.FC = () => {
       recognition.onend = () => setIsListening(false);
       recognitionRef.current = recognition;
     }
+
+    // Fetch FAQs
+    const fetchFaqs = async () => {
+      try {
+        const data = await api.getFAQs();
+        setFaqs(data);
+      } catch (e) {
+        console.error("Failed to load FAQs");
+      } finally {
+        setIsLoadingFaqs(false);
+      }
+    };
+    fetchFaqs();
   }, [language]);
 
   const toggleListening = () => {
@@ -176,20 +194,20 @@ const HelpCenter: React.FC = () => {
   };
 
   const commonQuestions = [
-    t.helpCommonQuestions1 || "How do I buy a .af domain?",
-    t.helpCommonQuestions2 || "Where can I find my active license keys?",
-    t.helpCommonQuestions3 || "How do I contact technical support?",
-    t.helpCommonQuestions4 || "What payment methods do you accept in Kabul?"
+    t.faqQ1,
+    t.faqQ2,
+    t.faqQ3,
+    t.faqQ4
   ];
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] min-h-screen font-sans transition-colors duration-300">
+    <div className="bg-white dark:bg-[#0d1117] min-h-screen font-sans transition-colors duration-300 pb-32">
       
-      {/* Enhanced Interactive Help Hero */}
+      {/* Fully Responsive Hero */}
       <section className="relative pt-24 pb-16 md:pt-40 md:pb-28 px-4 bg-gray-50 dark:bg-[#0d1117] border-b border-gray-200 dark:border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto relative z-10 text-center">
-           <h1 className="text-3xl sm:text-4xl md:text-6xl font-black mb-6 tracking-tight text-gray-900 dark:text-white animate-fade-in-up">
+           <h1 className="text-3xl sm:text-4xl md:text-6xl font-black mb-4 sm:mb-6 tracking-tight text-gray-900 dark:text-white animate-fade-in-up">
               {t.helpHeroTitle}
            </h1>
            <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gh-muted-dark mb-10 md:mb-12 animate-fade-in-up px-4" style={{animationDelay: '0.1s'}}>
@@ -206,7 +224,7 @@ const HelpCenter: React.FC = () => {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={isListening ? t.helpListening : t.helpSearchPlaceholder}
-                  className={`w-full bg-white dark:bg-[#161b22] border-2 border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-[32px] ${dir === 'rtl' ? 'pr-12 sm:pr-16 pl-32 sm:pl-44' : 'pl-12 sm:pl-16 pr-32 sm:pr-44'} py-5 sm:py-7 text-sm sm:text-lg shadow-xl focus:border-blue-600 outline-none transition-all group-hover:border-blue-500/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20`}
+                  className={`w-full bg-white dark:bg-[#161b22] border-2 border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-[32px] ${dir === 'rtl' ? 'pr-12 sm:pr-16 pl-28 sm:pl-44' : 'pl-12 sm:pl-16 pr-28 sm:pr-44'} py-5 sm:py-7 text-sm sm:text-lg shadow-xl focus:border-blue-600 outline-none transition-all group-hover:border-blue-500/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20`}
                 />
                 <div className={`absolute inset-y-2 sm:inset-y-2.5 ${dir === 'rtl' ? 'left-2 sm:left-2.5' : 'right-2 sm:right-2.5'} flex gap-1.5 sm:gap-2`}>
                    <button 
@@ -220,39 +238,44 @@ const HelpCenter: React.FC = () => {
                    <button 
                      type="submit"
                      disabled={isThinking || !query.trim()}
-                     className={`px-4 sm:px-8 bg-blue-600 hover:bg-blue-500 text-white rounded-xl sm:rounded-[24px] font-black uppercase text-[9px] sm:text-[10px] tracking-widest transition-all disabled:opacity-50 shadow-lg`}
+                     className={`px-4 sm:px-8 bg-blue-600 hover:bg-blue-500 text-white rounded-xl sm:rounded-[24px] font-black uppercase text-[10px] tracking-widest transition-all disabled:opacity-50 shadow-lg`}
                    >
                      {isThinking ? (
                         <div className="flex items-center gap-2">
                            <i className="fas fa-circle-notch fa-spin"></i>
-                           <span className="hidden sm:inline">{t.loading}</span>
+                           <span className="hidden md:inline">{t.loading}</span>
                         </div>
-                     ) : 'Search'}
+                     ) : (
+                        <div className="flex items-center gap-2">
+                           <i className="fas fa-wand-magic-sparkles md:hidden"></i>
+                           <span className="hidden md:inline">Ask Guide</span>
+                        </div>
+                     )}
                    </button>
                 </div>
               </form>
               
-              {/* Real-time Voice Transcription Badge */}
+              {/* Voice Status Hint */}
               {isListening && (
                 <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
                    <div className="flex items-center gap-3 bg-white dark:bg-gh-dark px-4 py-2 rounded-full border border-red-500/30 shadow-2xl animate-bounce">
                       <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                       <span className="text-[10px] font-black uppercase tracking-widest text-red-500">{t.helpListening}</span>
                    </div>
-                   <p className="text-[10px] font-bold text-gray-400 italic">Processing real-time speech...</p>
+                   <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 italic">{t.helpVoiceHint}</p>
                 </div>
               )}
            </div>
         </div>
       </section>
 
-      {/* Responsive Grid Content */}
+      {/* Main Grid: Adapts for Mobile (Single Column) and Desktop (Two Column with Sidebar) */}
       <div className="max-w-7xl mx-auto px-4 py-12 sm:py-20">
          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-16">
             
             <div className="lg:col-span-2 space-y-12 sm:space-y-16">
                
-               {/* Specialist Response Interface */}
+               {/* Specialist Response Interface - Fully Localized & Responsive */}
                {aiResponse && (
                   <div ref={responseRef} className="bg-blue-50 dark:bg-blue-600/5 border border-blue-200 dark:border-blue-500/20 p-6 sm:p-10 md:p-12 rounded-3xl sm:rounded-[40px] animate-scale-in shadow-xl relative group overflow-hidden">
                      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
@@ -264,11 +287,11 @@ const HelpCenter: React.FC = () => {
                             </div>
                             <div>
                                <h3 className="text-lg sm:text-xl font-black text-blue-600 dark:text-blue-400">{t.helpAiResponseTitle}</h3>
-                               <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-gray-400">Personalized Support Session</p>
+                               <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-gray-400">{t.helpSpecialistRole}</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 sm:gap-4">
                            {isSpeaking && (
                               <div className="flex gap-1 h-3 sm:h-4 items-end px-2">
                                  {[1,2,3,4,5].map(i => (
@@ -304,8 +327,46 @@ const HelpCenter: React.FC = () => {
                   </div>
                )}
 
-               {/* Quick Start Resources */}
-               <div className="space-y-8 sm:space-y-10 px-1 sm:px-0">
+               {/* FAQ Accordion Section - Fully Localized */}
+               <div className="space-y-8 sm:space-y-10">
+                  <h3 className="text-xl sm:text-2xl font-black flex items-center gap-4 text-gray-900 dark:text-white">
+                     <span className="w-8 sm:w-10 h-1.5 bg-blue-600 rounded-full"></span>
+                     {t.helpCommonQuestions}
+                  </h3>
+                  
+                  <div className="space-y-4">
+                     {isLoadingFaqs ? (
+                        [1, 2, 3].map(i => (
+                           <div key={i} className="h-16 bg-gray-50 dark:bg-white/5 rounded-2xl animate-pulse"></div>
+                        ))
+                     ) : faqs.map((faq) => (
+                        <div 
+                          key={faq.id} 
+                          className={`bg-white dark:bg-[#161b22] border rounded-2xl overflow-hidden transition-all duration-300 ${openFaqId === faq.id ? 'border-blue-500/50 shadow-lg' : 'border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10'}`}
+                        >
+                           <button 
+                              onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
+                              className="w-full flex items-center justify-between p-6 text-left group"
+                           >
+                              <span className={`font-bold text-sm sm:text-base transition-colors ${openFaqId === faq.id ? 'text-blue-600' : 'text-gray-900 dark:text-white group-hover:text-blue-600'}`}>
+                                {faq.q[language] || faq.q['en']}
+                              </span>
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${openFaqId === faq.id ? 'bg-blue-600 text-white rotate-180' : 'bg-gray-50 dark:bg-white/5 text-gray-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600'}`}>
+                                 <i className="fas fa-chevron-down text-xs"></i>
+                              </div>
+                           </button>
+                           <div className={`transition-all duration-300 ease-in-out ${openFaqId === faq.id ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                              <div className="p-6 pt-0 text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed border-t border-gray-50 dark:border-white/5 mx-6 py-6">
+                                 {faq.a[language] || faq.a['en']}
+                              </div>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+
+               {/* Quick Start Resources - Responsive Cards */}
+               <div className="space-y-8 sm:space-y-10 px-1 sm:px-0 pt-10">
                   <h3 className="text-xl sm:text-2xl font-black flex items-center gap-4 text-gray-900 dark:text-white">
                      <span className="w-8 sm:w-10 h-1.5 bg-blue-600 rounded-full"></span>
                      {t.helpQuickStart}
@@ -329,7 +390,7 @@ const HelpCenter: React.FC = () => {
                </div>
             </div>
 
-            {/* Support Sidebar */}
+            {/* Support Sidebar - Stacks below main content on Mobile */}
             <div className="space-y-8 sm:space-y-12">
                <div className="bg-gray-50 dark:bg-[#161b22] p-6 sm:p-8 rounded-3xl sm:rounded-[40px] border border-gray-200 dark:border-white/5 shadow-sm">
                   <h4 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] mb-8 sm:mb-10 text-gray-400 flex items-center gap-3">

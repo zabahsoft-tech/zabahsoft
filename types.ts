@@ -113,8 +113,10 @@ export interface Contribution {
 }
 
 export interface FAQ {
-  q: string;
-  a: string;
+  id: string;
+  q: Record<Language, string>;
+  a: Record<Language, string>;
+  category: string;
 }
 
 export interface WebDemo {

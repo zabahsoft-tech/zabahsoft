@@ -13,38 +13,8 @@ const partners = [
   { name: 'Etisalat', icon: 'fas fa-broadcast-tower' }
 ];
 
-const webDemos: WebDemo[] = [
-  {
-    id: 1,
-    title: "E-Government Portal",
-    category: "Public Sector",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
-    previewUrl: "https://example.com/demo1",
-    tags: ["React", "Security", "High-Load"],
-    description: "A centralized portal for citizen services and document management."
-  },
-  {
-    id: 2,
-    title: "National Logistics System",
-    category: "Enterprise",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
-    previewUrl: "https://example.com/demo2",
-    tags: ["Logistics", "Real-time", "Dashboard"],
-    description: "End-to-end supply chain tracking for nationwide distribution."
-  },
-  {
-    id: 3,
-    title: "Fintech Mobile Wallet Web",
-    category: "Fintech",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800",
-    previewUrl: "https://example.com/demo3",
-    tags: ["Payments", "API", "Mobile-First"],
-    description: "Web interface for a leading mobile payment provider in the region."
-  }
-];
-
 const Home: React.FC = () => {
-  const { t, dir } = useLanguage();
+  const { t, dir, siteSettings } = useLanguage();
   const navigate = useNavigate();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -274,159 +244,39 @@ const Home: React.FC = () => {
          </div>
       </section>
 
-      {/* Refined: Domain Quick Search Ribbon */}
+      {/* Enhanced Omni-Lookup Ribbon */}
       <section className="bg-gh-dark border-y border-white/5 relative overflow-hidden group/ribbon">
          <div className="absolute inset-0 bg-blue-600/5 group-hover/ribbon:bg-blue-600/10 transition-colors pointer-events-none"></div>
          <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-14 relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                <div className="text-center lg:text-left shrink-0">
                   <h2 className="text-xl sm:text-2xl font-black text-white mb-2 tracking-tight">Your Afghan Identity Starts Here.</h2>
-                  <p className="text-xs sm:text-sm text-gh-muted-dark font-medium">Official .AF registrar with instant provisioning.</p>
+                  <p className="text-xs sm:text-sm text-gh-muted-dark font-medium">Search any name or full domain address.</p>
                </div>
                
-               <form onSubmit={handleDomainQuickSearch} className="flex-1 w-full max-w-2xl flex p-1 sm:p-1.5 bg-[#0d1117]/50 border border-white/10 rounded-2xl sm:rounded-[28px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)] focus-within:border-blue-500/50 transition-all">
+               <form onSubmit={handleDomainQuickSearch} className="flex-1 w-full max-w-2xl flex p-1 sm:p-1.5 bg-[#0d1117]/50 border border-white/10 rounded-2xl sm:rounded-[28px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)] focus-within:border-blue-500/50 transition-all relative">
                   <input 
                     type="text" 
                     value={domainSearch}
                     onChange={(e) => setDomainSearch(e.target.value.toLowerCase())}
-                    placeholder="Official name..."
+                    placeholder="e.g. yourbrand.af"
                     className="flex-1 bg-transparent px-4 sm:px-8 py-3 sm:py-4 text-white text-base sm:text-lg outline-none placeholder-white/20 font-mono"
                   />
-                  <div className="hidden md:flex items-center px-6 border-l border-white/10 text-sm font-black text-blue-400/60 uppercase tracking-widest">
-                    .AF
-                  </div>
                   <button type="submit" className="ml-1 sm:ml-2 px-6 sm:px-10 py-3 sm:py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl sm:rounded-[22px] font-black text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95">
                      {t.domainSearch}
                   </button>
                </form>
 
-               <div className="flex gap-6 sm:gap-10 items-center shrink-0 overflow-x-auto no-scrollbar w-full sm:w-auto justify-center">
-                  <div className="text-center group/ext cursor-pointer shrink-0">
-                     <p className="text-blue-400 font-black text-lg sm:text-xl tracking-tighter group-hover/ext:scale-110 transition-transform">.AF</p>
-                     <p className="text-[9px] sm:text-[10px] text-white/30 font-black uppercase tracking-widest mt-1">$35</p>
+               <div className="flex gap-4 sm:gap-6 items-center shrink-0">
+                  <div className="flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                     <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Registrar Live</span>
                   </div>
-                  <div className="text-center group/ext cursor-pointer shrink-0">
-                     <p className="text-green-400 font-black text-lg sm:text-xl tracking-tighter group-hover/ext:scale-110 transition-transform">.COM</p>
-                     <p className="text-[9px] sm:text-[10px] text-white/30 font-black uppercase tracking-widest mt-1">$15</p>
+                  <div className="w-px h-8 bg-white/10 hidden sm:block"></div>
+                  <div className="hidden sm:flex gap-4">
+                     <i className="fas fa-id-card text-white/20"></i>
+                     <i className="fas fa-lock text-white/20"></i>
                   </div>
-                  <div className="text-center group/ext cursor-pointer shrink-0">
-                     <p className="text-purple-400 font-black text-lg sm:text-xl tracking-tighter group-hover/ext:scale-110 transition-transform">.NET</p>
-                     <p className="text-[9px] sm:text-[10px] text-white/30 font-black uppercase tracking-widest mt-1">$18</p>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </section>
-
-      {/* Quick Communication Slider Section */}
-      <section className="py-16 sm:py-20 bg-gray-50 dark:bg-[#161b22] border-y border-gray-200 dark:border-gray-800 relative overflow-hidden">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 items-center">
-               <div className="text-center lg:text-left">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.quickActionTitle}</h2>
-                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto lg:mx-0">{t.quickActionSub}</p>
-               </div>
-               
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="bg-white dark:bg-[#0d1117] p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-gh-border shadow-xl relative overflow-hidden group">
-                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-                     <h3 className="font-bold mb-4 text-blue-600 dark:text-blue-400 flex items-center gap-2">
-                        <i className="fas fa-microphone"></i> {t.sendVoiceMail}
-                     </h3>
-                     
-                     {voiceSuccess ? (
-                        <div className="py-6 text-center animate-fade-in">
-                           <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/20">
-                              <i className="fas fa-check text-2xl"></i>
-                           </div>
-                           <p className="text-xs font-bold text-gray-600 dark:text-gray-300">{t.voiceSentSuccess}</p>
-                        </div>
-                     ) : (
-                        <div className="flex flex-col items-center justify-center py-2 sm:py-4 space-y-4">
-                           <div className="relative">
-                              {isRecording && (
-                                 <div className="absolute inset-0 -m-3 sm:-m-4 border-2 border-red-500/30 rounded-full animate-ping"></div>
-                              )}
-                              <button 
-                                 onClick={isRecording ? stopRecording : startRecording}
-                                 className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center text-white shadow-2xl transition-all active:scale-90 z-10 relative ${isRecording ? 'bg-red-600' : 'bg-blue-600 hover:bg-blue-700'}`}
-                              >
-                                 <i className={`fas ${isRecording ? 'fa-square' : 'fa-microphone'} text-xl sm:text-2xl`}></i>
-                              </button>
-                           </div>
-                           
-                           <div className="text-center w-full min-h-[80px] sm:min-h-[100px] flex flex-col justify-center">
-                              {isRecording ? (
-                                 <div className="animate-fade-in flex flex-col items-center space-y-2 sm:space-y-3">
-                                    <span className="text-red-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest animate-pulse">{t.recordingStatus}</span>
-                                    <div className="flex gap-1 h-3 sm:h-4 items-end">
-                                       {[...Array(6)].map((_, i) => (
-                                          <div key={i} className="w-0.5 sm:w-1 bg-red-500 rounded-full animate-bounce" style={{height: `${20 + Math.random()*80}%`, animationDelay: `${i*0.1}s`}}></div>
-                                       ))}
-                                    </div>
-                                    <span className="text-xl sm:text-2xl font-mono font-bold">{Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}</span>
-                                 </div>
-                              ) : audioBlob ? (
-                                 <div className="space-y-3 sm:space-y-4 animate-fade-in-up">
-                                    <p className="text-[9px] sm:text-[10px] text-blue-500 font-bold uppercase">{t.promptWhatsapp}</p>
-                                    <input 
-                                       type="tel"
-                                       autoFocus
-                                       value={whatsappNum}
-                                       onChange={(e) => setWhatsappNum(e.target.value)}
-                                       placeholder={t.whatsappPlaceholder}
-                                       className="w-full bg-gray-50 dark:bg-gh-bg border border-gray-200 dark:border-gh-border rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-center outline-none focus:ring-2 focus:ring-blue-600 transition-all font-mono"
-                                    />
-                                    <button 
-                                       onClick={sendVoiceMail}
-                                       disabled={isSubmitting || !whatsappNum}
-                                       className="w-full py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-[10px] sm:text-xs font-bold shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                       {isSubmitting ? <i className="fas fa-spinner fa-spin"></i> : <><i className="fas fa-paper-plane"></i> {t.sendVoiceBtn}</>}
-                                    </button>
-                                 </div>
-                              ) : (
-                                 <div className="flex flex-col items-center gap-2">
-                                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium">{t.startRecording}</p>
-                                    <div className="flex gap-1 opacity-20">
-                                       {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-2 sm:h-3 bg-gray-400 rounded-full"></div>)}
-                                    </div>
-                                 </div>
-                              )}
-                           </div>
-                        </div>
-                     )}
-                  </div>
-
-                  <a 
-                    href="https://wa.me/93799000000" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-white dark:bg-[#0d1117] p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-gh-border shadow-xl relative overflow-hidden group flex flex-col justify-between hover:border-green-500/50 transition-all"
-                  >
-                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-2xl"></div>
-                     <div>
-                        <div className="flex justify-between items-start mb-4 sm:mb-6">
-                           <h3 className="font-bold text-green-600 dark:text-green-400 flex items-center gap-2 text-sm sm:text-base">
-                              <i className="fab fa-whatsapp text-xl"></i> WhatsApp
-                           </h3>
-                           <span className="bg-green-500/10 text-green-500 text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full border border-green-500/20">LIVE</span>
-                        </div>
-                        <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
-                           Quick replies and order support directly through your phone.
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                           <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 bg-gray-50 dark:bg-gray-800 px-2 py-0.5 sm:py-1 rounded">#Orders</span>
-                           <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 bg-gray-50 dark:bg-gray-800 px-2 py-0.5 sm:py-1 rounded">#Support</span>
-                        </div>
-                     </div>
-                     <div className="mt-6 sm:mt-8 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 sm:pt-6">
-                        <span className="text-xs sm:text-sm font-bold font-mono text-gray-800 dark:text-gray-200">+93 799 000 000</span>
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                           <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'} text-xs sm:text-sm`}></i>
-                        </div>
-                     </div>
-                  </a>
                </div>
             </div>
          </div>
@@ -435,12 +285,12 @@ const Home: React.FC = () => {
       {/* Strategic Partners */}
       <section className="py-12 sm:py-16 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gh-bg">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-            <h3 className="text-sm sm:text-lg font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-widest animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>{t.partnersTitle}</h3>
-            <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto animate-fade-in-up opacity-0" style={{animationDelay: '0.4s'}}>{t.partnersDesc}</p>
+            <h3 className="text-sm sm:text-lg font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-widest">{t.partnersTitle}</h3>
+            <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">{t.partnersDesc}</p>
             
             <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 md:gap-20 opacity-70">
                 {partners.map((partner, index) => (
-                    <div key={index} className="flex flex-col items-center gap-2 sm:gap-3 group cursor-default hover:scale-110 transition-transform duration-300 animate-fade-in-up opacity-0" style={{animationDelay: `${0.6 + index * 0.1}s`}}>
+                    <div key={index} className="flex flex-col items-center gap-2 sm:gap-3 group cursor-default hover:scale-110 transition-transform duration-300">
                         <div className="text-3xl sm:text-4xl text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                             <i className={partner.icon}></i>
                         </div>
@@ -487,194 +337,98 @@ const Home: React.FC = () => {
          </div>
       </section>
 
-      {/* Solutions Core Ecosystem Categories Module */}
-      <section className="py-16 sm:py-24 bg-white dark:bg-[#0d1117] border-t border-gray-100 dark:border-gray-800">
+      {/* Testimonials Section */}
+      <section className="py-24 bg-white dark:bg-gh-bg">
          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12 sm:mb-16 px-4">
-               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.moduleSolutionsTitle}</h2>
-               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t.moduleSolutionsSub}</p>
+            <div className="text-center mb-16">
+               <h2 className="text-3xl sm:text-4xl font-black mb-4">{t.testimonialsTitle}</h2>
+               <p className="text-gray-500 dark:text-gray-400">{t.testimonialsSubtitle}</p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-               {[
-                  { title: t.navWeb, sub: "High-performance web solutions built for scale and reliability.", icon: 'fa-laptop-code', link: '/solutions/web', color: 'bg-blue-600' },
-                  { title: "Official Domains", sub: " Afghanistan's official .AF domains for private and public sector identification.", icon: 'fa-globe', link: '/domains', color: 'bg-green-600' },
-                  { title: t.navHosting, sub: t.hostingHeroSubtitle, icon: 'fa-server', link: '/solutions/hosting', color: 'bg-purple-600' }
-               ].map((mod, i) => (
-                  <Link key={i} to={mod.link} className="group bg-gray-50 dark:bg-[#161b22] p-8 sm:p-10 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-gh-border hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-2">
-                     <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${mod.color} flex items-center justify-center text-white text-xl sm:text-2xl mb-6 sm:mb-8 shadow-lg group-hover:scale-110 transition-transform`}>
-                        <i className={`fas ${mod.icon}`}></i>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {isLoadingTestimonials ? (
+                  [1,2,3].map(i => <div key={i} className="h-48 bg-gray-50 dark:bg-white/5 rounded-3xl animate-pulse"></div>)
+               ) : testimonials.map(test => (
+                  <div key={test.id} className="bg-gray-50 dark:bg-[#161b22] p-8 rounded-[32px] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-xl transition-all group">
+                     <div className="flex items-center gap-4 mb-6">
+                        <img src={test.avatar} className="w-12 h-12 rounded-xl group-hover:scale-110 transition-transform" />
+                        <div>
+                           <h4 className="font-black text-sm">{test.name}</h4>
+                           <p className="text-[10px] font-bold text-blue-600 uppercase">{test.role} @ {test.company}</p>
+                        </div>
                      </div>
-                     <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-gray-900 dark:text-white">{mod.title}</h3>
-                     <p className="text-gray-500 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed text-xs sm:text-sm line-clamp-3">{mod.sub}</p>
-                     <span className="inline-flex items-center gap-2 text-blue-600 font-bold text-[10px] sm:text-sm uppercase tracking-widest group-hover:gap-4 transition-all">
-                        {t.learnMore} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i>
-                     </span>
-                  </Link>
+                     <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic">"{test.content}"</p>
+                  </div>
                ))}
             </div>
          </div>
       </section>
 
-      {/* Quick Request Section */}
-      <section ref={requestSectionRef} className="py-16 sm:py-24 bg-gray-50 dark:bg-[#161b22] border-t border-gray-200 dark:border-gray-800">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-               
-               <div className="text-center lg:text-left px-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-500 text-[9px] sm:text-[10px] font-bold uppercase mb-4 sm:mb-6 tracking-widest">
-                     {t.featFastDeploy}
+      {/* Voice Mail Section */}
+      <section ref={requestSectionRef} className="py-24 bg-gray-50 dark:bg-[#0d1117] border-y border-gray-200 dark:border-white/5">
+         <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2 space-y-6">
+               <h2 className="text-4xl font-black tracking-tighter">Skip the forms.<br/><span className="text-blue-600">Send a voice note.</span></h2>
+               <p className="text-gray-500 dark:text-gray-400 text-lg">Our engineering leads in Kabul will listen and respond within 2 hours during business operations.</p>
+               <div className="flex items-center gap-4 p-4 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-2xl">
+                  <div className="w-12 h-12 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-xl"><i className="fab fa-whatsapp"></i></div>
+                  <div>
+                     <p className="text-[10px] font-black uppercase text-gray-400">Direct WhatsApp</p>
+                     <p className="font-mono font-black text-blue-600" dir="ltr">{siteSettings?.phone || '+93 799 000 000'}</p>
                   </div>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
-                     {t.homeRequestTitle}
-                  </h2>
-                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                     {t.homeRequestSubtitle}
-                  </p>
+               </div>
+            </div>
+            
+            <div className="md:w-1/2 w-full">
+               <div className="bg-white dark:bg-[#161b22] p-10 rounded-[40px] shadow-2xl border border-gray-100 dark:border-white/5 text-center relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5"><i className="fas fa-microphone-alt text-8xl"></i></div>
                   
-                  <div className="space-y-4 sm:space-y-6 text-left max-w-md mx-auto lg:mx-0">
-                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-gh-dark border border-gray-200 dark:border-gh-border flex items-center justify-center text-blue-600 shrink-0">
-                           <i className="fas fa-bolt"></i>
-                        </div>
-                        <div>
-                           <h4 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">{t.featRapidProto}</h4>
-                           <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 font-medium">{t.featRapidProtoDesc}</p>
-                        </div>
+                  {voiceSuccess ? (
+                     <div className="py-10 animate-fade-in">
+                        <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-6"><i className="fas fa-check"></i></div>
+                        <h3 className="text-xl font-black mb-2">Message Dispatched</h3>
+                        <p className="text-sm text-gray-500">Wait for our WhatsApp ping.</p>
+                        <button onClick={() => setVoiceSuccess(false)} className="mt-8 text-blue-600 font-black uppercase text-[10px] tracking-widest hover:underline">Send another</button>
                      </div>
-                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-gh-dark border border-gray-200 dark:border-gh-border flex items-center justify-center text-green-600 shrink-0">
-                           <i className="fas fa-shield-alt"></i>
-                        </div>
+                  ) : (
+                     <div className="space-y-8">
+                        <button 
+                           onMouseDown={startRecording}
+                           onMouseUp={stopRecording}
+                           onTouchStart={startRecording}
+                           onTouchEnd={stopRecording}
+                           className={`w-32 h-32 rounded-full flex items-center justify-center text-4xl shadow-xl transition-all mx-auto relative ${isRecording ? 'bg-red-600 text-white scale-90 ring-8 ring-red-600/20' : 'bg-blue-600 text-white hover:scale-105 active:scale-95 shadow-blue-500/20'}`}
+                        >
+                           <i className={`fas ${isRecording ? 'fa-square' : 'fa-microphone'}`}></i>
+                           {isRecording && <span className="absolute inset-0 rounded-full border-4 border-white animate-ping"></span>}
+                        </button>
+                        
                         <div>
-                           <h4 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">{t.featSecureDefault}</h4>
-                           <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 font-medium">{t.featSecureDefaultDesc}</p>
+                           <p className="font-black text-sm uppercase tracking-widest">{isRecording ? `Recording... ${recordingTime}s` : 'Hold to Record Voice Mail'}</p>
+                           <p className="text-xs text-gray-400 mt-2">Captured audio will be sent directly to our support desk.</p>
                         </div>
-                     </div>
-                  </div>
-               </div>
 
-               <div className="animate-scale-in w-full">
-                  <div className="bg-white dark:bg-[#0d1117] p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-gh-border shadow-2xl relative overflow-hidden">
-                     {requestSuccess ? (
-                        <div className="py-12 sm:py-16 text-center animate-fade-in">
-                           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-500/10 rounded-full flex items-center justify-center text-green-500 text-3xl sm:text-4xl mx-auto mb-6 shadow-inner border border-green-500/20">
-                              <i className="fas fa-check-circle"></i>
-                           </div>
-                           <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.homeRequestSuccess}</h3>
-                           <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs mx-auto">
-                              {t.homeRequestSuccessSub}
-                           </p>
-                        </div>
-                     ) : (
-                        <form onSubmit={handleRequestSubmit} className="space-y-5 sm:space-y-6">
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                              <div className="space-y-1.5 sm:space-y-2">
-                                 <label className="text-[9px] sm:text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">{t.lblFullName}</label>
-                                 <input 
-                                    required
-                                    type="text" 
-                                    value={requestForm.name}
-                                    onChange={e => setRequestForm({...requestForm, name: e.target.value})}
-                                    className={`w-full bg-gray-50 dark:bg-gh-bg border border-gray-200 dark:border-gh-border rounded-xl p-3 sm:p-3.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-600 transition-all ${dir === 'rtl' ? 'font-rtl' : ''}`} 
-                                    placeholder={t.placeholderName}
-                                 />
-                              </div>
-                              <div className="space-y-1.5 sm:space-y-2">
-                                 <label className="text-[9px] sm:text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">{t.lblEmail}</label>
-                                 <input 
-                                    required
-                                    type="email" 
-                                    value={requestForm.email}
-                                    onChange={e => setRequestForm({...requestForm, email: e.target.value})}
-                                    className={`w-full bg-gray-50 dark:bg-gh-bg border border-gray-200 dark:border-gh-border rounded-xl p-3 sm:p-3.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-600 transition-all ${dir === 'rtl' ? 'font-rtl' : ''}`} 
-                                    placeholder={t.placeholderEmail}
-                                 />
-                              </div>
-                           </div>
-                           <div className="space-y-1.5 sm:space-y-2">
-                              <label className="text-[9px] sm:text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">{t.lblProjectType}</label>
-                              <select 
-                                 value={requestForm.serviceType}
-                                 onChange={e => setRequestForm({...requestForm, serviceType: e.target.value})}
-                                 className={`w-full bg-gray-50 dark:bg-gh-bg border border-gray-200 dark:border-gh-border rounded-xl p-3 sm:p-3.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-600 transition-all cursor-pointer ${dir === 'rtl' ? 'font-rtl' : ''}`}
+                        {audioBlob && !isRecording && (
+                           <div className="space-y-4 animate-scale-in">
+                              <input 
+                                 type="text" 
+                                 placeholder="Your WhatsApp Number (e.g. 0799000000)" 
+                                 value={whatsappNum}
+                                 onChange={(e) => setWhatsappNum(e.target.value)}
+                                 className="w-full bg-gray-50 dark:bg-gh-bg border border-gray-100 dark:border-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono text-center"
+                              />
+                              <button 
+                                 onClick={sendVoiceMail}
+                                 disabled={!whatsappNum || isSubmitting}
+                                 className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black py-4 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
                               >
-                                 <option value="Web Development">{t.optWebDev}</option>
-                                 <option value="Database Cluster">{t.optDbCluster}</option>
-                                 <option value="Enterprise Software">{t.optEntSoft}</option>
-                                 <option value="Official Emails">{t.optOffEmails}</option>
-                              </select>
+                                 {isSubmitting ? <i className="fas fa-spinner fa-spin"></i> : 'Submit Voice Memo'}
+                              </button>
                            </div>
-                           <div className="space-y-1.5 sm:space-y-2">
-                              <label className="text-[9px] sm:text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">{t.lblMessage}</label>
-                              <textarea 
-                                 required
-                                 rows={3}
-                                 value={requestForm.message}
-                                 onChange={e => setRequestForm({...requestForm, message: e.target.value})}
-                                 className={`w-full bg-gray-50 dark:bg-gh-bg border border-gray-200 dark:border-gh-border rounded-xl p-3 sm:p-3.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-600 transition-all resize-none ${dir === 'rtl' ? 'font-rtl' : ''}`} 
-                                 placeholder={t.placeholderProject}
-                              ></textarea>
-                           </div>
-                           <button 
-                              type="submit" 
-                              disabled={isSubmitting}
-                              className="w-full bg-blue-600 text-white font-bold py-3.5 sm:py-4 rounded-xl shadow-lg hover:bg-blue-700 transition-all active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 text-sm sm:text-base uppercase tracking-widest"
-                           >
-                              {isSubmitting ? <i className="fas fa-spinner fa-spin"></i> : <>{t.btnSubmit} <i className={`fas ${dir === 'rtl' ? 'fa-arrow-left' : 'fa-arrow-right'}`}></i></>}
-                           </button>
-                        </form>
-                     )}
-                  </div>
+                        )}
+                     </div>
+                  )}
                </div>
-            </div>
-         </div>
-      </section>
-
-      {/* Dynamic Testimonials Section */}
-      <section className="py-16 sm:py-24 bg-white dark:bg-[#0d1117]">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12 sm:mb-16">
-               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">{t.testimonialsTitle}</h2>
-               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                  {t.testimonialsSubtitle}
-               </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-               {isLoadingTestimonials ? (
-                  [1,2,3].map(i => (
-                    <div key={i} className="bg-white dark:bg-[#161b22] p-8 rounded-2xl h-64 animate-pulse border border-gray-100 dark:border-gray-800"></div>
-                  ))
-               ) : testimonials.length === 0 ? (
-                  <div className="col-span-3 py-12 text-center text-gray-500 italic">No testimonials available.</div>
-               ) : (
-                  testimonials.map((item, i) => (
-                    <div key={item.id} className="bg-gray-50 dark:bg-[#161b22] p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 relative hover:-translate-y-1 transition-transform duration-300">
-                       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 text-3xl sm:text-4xl text-gray-100 dark:text-gray-800 opacity-50">
-                          <i className="fas fa-quote-right"></i>
-                       </div>
-                       
-                       <div className="flex items-center gap-1 mb-4 text-yellow-400 text-[10px] sm:text-xs">
-                          {[...Array(5)].map((_, starI) => (
-                             <i key={starI} className={`${starI < item.rating ? 'fas' : 'far'} fa-star`}></i>
-                          ))}
-                       </div>
-                       
-                       <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mb-6 sm:mb-8 italic leading-relaxed relative z-10">
-                          "{item.content}"
-                       </p>
-                       
-                       <div className="flex items-center gap-3 sm:gap-4 border-t border-gray-100 dark:border-gray-800 pt-4 sm:pt-6">
-                          <img src={item.avatar} alt={item.name} className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-200 dark:border-gray-700" />
-                          <div>
-                             <h4 className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">{item.name}</h4>
-                             <p className="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400">{item.role}, {item.company}</p>
-                          </div>
-                       </div>
-                    </div>
-                  ))
-               )}
             </div>
          </div>
       </section>

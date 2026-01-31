@@ -1,11 +1,12 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import { behaviorTracker } from '../services/behaviorTracker';
 
 const ChatWidget: React.FC = () => {
-  const { t, dir } = useLanguage();
+  const { t, dir, siteSettings } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: 'Hello! I am ZabahBot. How can I assist you with our services today?', timestamp: new Date() }
@@ -14,7 +15,18 @@ const ChatWidget: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const suggestions = [t.sugPricing, t.sugServices, t.sugSupport];
+  // Dynamic suggestions based on cookie tracking
+  const suggestions = useMemo(() => {
+    const interest = behaviorTracker.getUserInterest();
+    const list = [t.sugPricing, t.sugServices, t.sugSupport];
+    
+    if (interest === 'hosting') list.unshift(t.sugHosting);
+    else if (interest === 'domains') list.unshift(t.sugDomain);
+    else if (interest === 'web') list.unshift(t.sugWeb);
+    else if (interest === 'blog') list.unshift(t.sugBlog);
+    
+    return [...new Set(list)]; // Unique items
+  }, [isOpen, t]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,7 +52,13 @@ const ChatWidget: React.FC = () => {
         parts: [{ text: m.text }]
       }));
 
-      const responseText = await sendMessageToGemini(userMsg.text, history);
+      // Pass interest context to AI if available in cookies
+      const interest = behaviorTracker.getUserInterest();
+      const contextualMessage = interest 
+        ? `[USER INTEREST: ${interest}] ${userMsg.text}`
+        : userMsg.text;
+
+      const responseText = await sendMessageToGemini(contextualMessage, history);
       
       const botMsg: ChatMessage = { role: 'model', text: responseText, timestamp: new Date() };
       setMessages(prev => [...prev, botMsg]);
@@ -54,8 +72,6 @@ const ChatWidget: React.FC = () => {
   const handleFeedback = (index: number, type: 'up' | 'down') => {
     setMessages(prev => prev.map((msg, i) => {
       if (i === index) {
-        // In a real app, this would send data to an analytics endpoint
-        console.log(`[Feedback] Message ${index} rated ${type}:`, msg.text);
         return { ...msg, feedback: type };
       }
       return msg;
@@ -114,7 +130,6 @@ const ChatWidget: React.FC = () => {
                       {msg.text}
                     </div>
                     
-                    {/* Feedback Buttons for Bot Messages */}
                     {msg.role === 'model' && (
                         <div className="flex gap-3 mt-1 ml-2">
                             <button 
@@ -153,16 +168,20 @@ const ChatWidget: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Contact Integration & Suggestions */}
+          {/* Cookie-Powered Contextual Suggestions */}
           <div className="px-4 py-2 bg-gray-50 border-t border-gh-border-light space-y-2">
-             {/* Suggestions */}
              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 {suggestions.map((sug, idx) => (
                     <button 
                         key={idx}
                         onClick={(e) => handleSend(e, sug)}
-                        className="whitespace-nowrap px-3 py-1 rounded-full bg-white border border-gh-blue/30 text-gh-blue text-xs font-medium hover:bg-gh-blue hover:text-white transition-colors"
+                        className={`whitespace-nowrap px-3 py-1 rounded-full border text-xs font-bold transition-all ${
+                          idx === 0 && suggestions.length > 3 
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-md scale-105' 
+                            : 'bg-white border-gh-blue/30 text-gh-blue hover:bg-gh-blue hover:text-white'
+                        }`}
                     >
+                        {idx === 0 && suggestions.length > 3 && <i className="fas fa-star mr-1 text-[8px]"></i>}
                         {sug}
                     </button>
                 ))}
@@ -188,14 +207,13 @@ const ChatWidget: React.FC = () => {
               </button>
             </div>
             
-            {/* Quick Contact Icons */}
             <div className="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
                 <span className="text-[10px] text-gray-400">{t.chatContact}</span>
                 <div className="flex gap-3">
-                    <a href="mailto:support@zabahsoft.com" className="text-gray-400 hover:text-gh-text transition-colors" title="Email Us">
+                    <a href={`mailto:${siteSettings?.supportEmail || 'support@zabahsoft.com'}`} className="text-gray-400 hover:text-gh-text transition-colors" title="Email Us">
                         <i className="fas fa-envelope"></i>
                     </a>
-                    <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-500 transition-colors" title="WhatsApp">
+                    <a href={`https://wa.me/${siteSettings?.whatsapp || '93799000000'}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-500 transition-colors" title="WhatsApp">
                         <i className="fab fa-whatsapp"></i>
                     </a>
                 </div>
