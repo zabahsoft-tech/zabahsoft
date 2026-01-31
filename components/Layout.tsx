@@ -12,6 +12,21 @@ interface LayoutProps {
   onLogout: () => void;
 }
 
+const ZabahLogo = ({ className = "w-10 h-10" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M50 5L90 25V75L50 95L10 75V25L50 5Z" fill="url(#logoGradient)" />
+    <path opacity="0.3" d="M50 5L90 25L50 45L10 25L50 5Z" fill="white" />
+    <path opacity="0.2" d="M10 25L50 45V95L10 75V25Z" fill="black" />
+    <path d="M35 35H65L45 55H65V65H35L55 45H35V35Z" fill="white" />
+    <defs>
+      <linearGradient id="logoGradient" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0969da" />
+        <stop offset="1" stopColor="#388bfd" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
 const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [delayedPos, setDelayedPos] = useState({ x: 0, y: 0 });
@@ -157,8 +172,8 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
         <div className={`max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between ${navHeightClass}`}>
           
           <Link to="/" className="flex items-center gap-3 z-[110] relative group">
-            <div className="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-300">
-               <i className="fas fa-cube text-xl"></i> 
+            <div className="transition-transform duration-300 group-hover:scale-110">
+               <ZabahLogo className="w-10 h-10 lg:w-11 lg:h-11 shadow-lg" />
             </div>
             <div className="flex flex-col -gap-1 hidden min-[360px]:flex">
               <span className="font-black text-lg lg:text-xl tracking-tighter uppercase leading-none">
@@ -297,10 +312,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-24 mb-24">
                <div className="space-y-10">
                   <Link to="/" className="flex items-center gap-4 group">
-                    <div className="relative w-12 h-12 flex items-center justify-center">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-cyan-400 rounded-2xl shadow-xl group-hover:rotate-6 transition-transform"></div>
-                        <i className="fas fa-cube text-white text-2xl relative z-10"></i> 
-                    </div>
+                    <ZabahLogo className="w-12 h-12 shadow-xl transition-transform group-hover:rotate-6" />
                     <span className="font-black text-3xl tracking-tighter uppercase">{t.brandName}</span>
                   </Link>
                   <p className="text-gray-500 dark:text-gray-400 text-[15px] leading-relaxed max-w-sm font-medium">
